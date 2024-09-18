@@ -3,12 +3,11 @@
 <link rel="stylesheet" href="css/style.css">
 <nav class="nav-menu">
     <div class="nav-container">
+        <a href="/proyectoBDM" class="logo-container" style="margin: 0; display: flex">
+            <img src="media/logo.png" alt="Logo de WebLearning" class="logo-footer" style="height: 70px; width:70px; aspect-ratio: 1; margin: 0px;">
+        </a>
         <ul class="nav-links">
             <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#cursos">Cursos</a></li>
-            <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
-            <li><a href="#testimonios">Testimonios</a></li>
-            <li><a href="#contacto">Contacto</a></li>
         </ul>
         <div class="nav-buttons">
             <a href="inisesion.php" class="color-btn">Iniciar Sesión</a>
