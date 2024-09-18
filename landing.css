@@ -1,0 +1,218 @@
+/* General Body */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #19191a;
+    color: #f4e1b9;
+    line-height: 1.6;
+}
+
+/* Hero Section */
+header.hero {
+    background-image: url('https://leverageedublog.s3.ap-south-1.amazonaws.com/blog/wp-content/uploads/2019/10/23170101/List-of-Professional-Courses-after-Graduation.gif');
+    background-size: cover; /* La imagen cubrirá todo el área */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    color: #ecdda2;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+header.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 55%;
+    background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad con el valor alfa */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+.hero-content h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.hero-content p {
+    font-size: 1.3em;
+    margin-bottom: 40px;
+    color:#f4e1b9;
+}
+
+
+.cta-button {
+    background-color: #c9b977;
+    color: #020202;
+    padding: 15px 40px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #ecdda2;
+    color: #020202;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Navigation Menu */
+.nav-menu.modern {
+    background-color: #373739;
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo a {
+    color: #ecdda2;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 2px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: #c9b977;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 16px;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+
+.nav-links li a:hover {
+    background-color: #c9b977;
+    color: #020202;
+}
+
+/* Buttons */
+.nav-buttons a {
+    color: #ecdda2;
+    padding: 10px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.login-btn {
+    background-color: transparent;
+    border: 2px solid #ecdda2;
+}
+
+.login-btn:hover {
+    background-color: #c9b977;
+    border-color: #c9b977;
+    color: #020202;
+}
+
+.register-btn {
+    background-color: #c9b977;
+    color: #020202;
+}
+
+.register-btn:hover {
+    background-color: #373739;
+    color: #ecdda2;
+}
+
+/* Main Content */
+main.main-content {
+    padding: 40px;
+    background-color: #020202;
+    color: #ecdda2;
+}
+
+/* Grid for courses */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.course-card {
+    background-color: #19191a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.course-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.course-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: #c9b977;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.course-link:hover {
+    color: #ecdda2;
+}
+
+/* About Section */
+.about-section p {
+    text-align: center;
+    font-size: 1.2em;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+/* Footer */
+footer.footer {
+    background-color: #373739;
+    color: #ecdda2;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    font-size: 0.9em;
+    box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-footer {
+    width: 100px; /* Tamaño del logo en el footer */
+    height: auto;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Cursos</title>
+    <link rel="stylesheet" href="busqueda.css">
+</head>
+<body>
+    <header>
+        <h1>Buscador de Cursos</h1>
+    </header>
+
+    <section class="buscador">
+        <form action="#" method="GET">
+            <label for="categoria">Categoría:</label>
+            <select id="categoria" name="categoria">
+                <option value="todas">Todas</option>
+                <option value="it-software">IT & Software</option>
+                <option value="marketing">Marketing</option>
+                <option value="design">Design</option>
+                <!-- Agrega más categorías según sea necesario -->
+            </select>
+
+            <label for="titulo">Título del Curso:</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Buscar por título">
+
+            <label for="usuario">Publicado por:</label>
+            <input type="text" id="usuario" name="usuario" placeholder="Buscar por usuario">
+
+            <label for="fecha-inicio">Fecha de Publicación (Inicio):</label>
+            <input type="date" id="fecha-inicio" name="fecha-inicio">
+
+            <label for="fecha-fin">Fecha de Publicación (Fin):</label>
+            <input type="date" id="fecha-fin" name="fecha-fin">
+
+            <button type="submit">Buscar</button>
+        </form>
+    </section>
+
+    <section class="resultados">
+        <h2>Resultados de la Búsqueda</h2>
+        <ul id="lista-cursos">
+            <li>
+                <h3>Curso de Programación Avanzada</h3>
+                <p>Categoría: IT & Software</p>
+                <p>Publicado por: Juan Pérez</p>
+                <p>Fecha de Publicación: 01 Ago 2024</p>
+            </li>
+            <li>
+                <h3>Introducción al Marketing Digital</h3>
+                <p>Categoría: Marketing</p>
+                <p>Publicado por: María López</p>
+                <p>Fecha de Publicación: 15 Jul 2024</p>
+            </li>
+            <!-- Los cursos mostrados deben ser filtrados por la búsqueda -->
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Portal de Cursos. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

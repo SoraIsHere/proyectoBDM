@@ -1,0 +1,96 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+/* Estilos de los filtros */
+.filtros {
+    padding: 20px;
+    background-color: #e4e4e4;
+}
+
+.filtros form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.filtros label {
+    margin-right: 10px;
+}
+
+.filtros input, .filtros select {
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.filtros button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.filtros button:hover {
+    background-color: #555;
+}
+
+/* Estilos del Resumen de Ventas */
+.resumen-ventas, .detalle-curso {
+    padding: 20px;
+}
+
+.resumen-ventas table, .detalle-curso table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.resumen-ventas th, .detalle-curso th, .resumen-ventas td, .detalle-curso td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.resumen-ventas th, .detalle-curso th {
+    background-color: #f2f2f2;
+}
+
+.resumen-ventas tr:nth-child(even), .detalle-curso tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.resumen-ventas tr:hover, .detalle-curso tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Formato de fechas y cantidades monetarias */
+td[data-type="fecha"] {
+    text-transform: capitalize;
+}
+
+td[data-type="moneda"] {
+    text-align: right;
+}
+
+/* Estilos del pie de página */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

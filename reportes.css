@@ -1,0 +1,87 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+/* Estilos de los filtros */
+.filtros-reporte {
+    padding: 20px;
+    background-color: #e4e4e4;
+    text-align: center;
+}
+
+.filtros-reporte form {
+    display: inline-block;
+}
+
+.filtros-reporte label {
+    margin-right: 10px;
+}
+
+.filtros-reporte select, .filtros-reporte button {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.filtros-reporte button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.filtros-reporte button:hover {
+    background-color: #555;
+}
+
+/* Estilos de los resultados */
+.resultados {
+    padding: 20px;
+}
+
+.resultados h2 {
+    text-align: center;
+}
+
+.resultados table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.resultados th, .resultados td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.resultados th {
+    background-color: #f2f2f2;
+}
+
+.resultados td {
+    font-size: 0.9em;
+}
+
+/* Estilos del pie de página */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
