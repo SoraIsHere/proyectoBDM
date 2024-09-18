@@ -1,0 +1,129 @@
+header {
+    background-color: #19191a;
+    color: #c9b977;
+    padding: 20px;
+    border-bottom: 4px solid #ecdda2;
+    position: relative;
+}
+
+
+/* Main Title */
+h1 {
+    margin: 0;
+    text-align: center;
+}
+
+/* Filtros */
+.filtros {
+    padding-bottom: 0;
+}
+
+.filtros .container {
+    background-color: #373739;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.filtros h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.filtros form {
+    display: flex;
+    flex-direction: column;
+}
+
+.filtros label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filtros input[type="date"],
+.filtros select {
+    padding: 12px;
+    border: 1px solid var(--color-primary);
+    border-radius: 6px;
+    background-color: #19191a;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+}
+
+
+.filtros button {
+    padding: 12px;
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 6px;
+    color: #020202;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    align-self: center;
+}
+
+
+
+/* Main Section */
+main {
+    padding: 20px;
+}
+
+.editar button{
+    margin-top: 20px;
+}
+
+.kardex .container, .editar .container {
+    background-color: #373739;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.kardex h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.datos-usuario {
+    margin: 0;
+    margin-top: 200px;
+    padding: 0;
+}
+
+.datos-usuario .container {
+    background-color: #373739;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.datos-usuario .perfil {
+    padding-top: 70px;
+}
+
+.perfil button, .perfil a {
+    float: right;
+}
+
+.img-perfil {
+    overflow: hidden;
+    position: absolute;
+    top: -100px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.img-perfil img {
+    aspect-ratio: 1/1;
+    max-width: 200px;
+    border-radius: 200px;
+    object-fit: cover;
+    border: 7px solid white;
+}

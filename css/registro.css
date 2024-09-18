@@ -1,0 +1,80 @@
+main {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../media/fondos/Paginas-cursos-online-gratis.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: cover;
+    padding: 100px 20px;
+}
+
+/* Login Card Container */
+.login-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Login Card Styles */
+.login-card {
+    background-color: #373739d2;
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 900px;
+    text-align: left;
+}
+
+/* Logo Section */
+.login-card-logo img {
+    width: 100px;
+}
+
+/* Header */
+.login-card-header h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+
+}
+
+.login-card-header div {
+    color: var(--color-primary);
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+/* Form Styles */
+.login-card-form {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.campos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Form Items */
+.form-item {
+    position: relative;
+    margin-bottom: 20px;
+    width: calc(50% - 10px);
+}
+
+.form-item:last-child {
+    width: 100%;
+}
+
+
+.login-card-footer a:hover {
+    text-decoration: underline;
+}

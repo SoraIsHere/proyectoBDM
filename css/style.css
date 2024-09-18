@@ -1,0 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* General */
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --color-background: #1F1F1F;
+    --color-secondary-background: #121212;
+    --color-light-background: #2C2C2C;
+    --color-grey-light-background: #373739;
+    --color-accent: #BB86FC;
+    --color-primary: #03DAC6;
+    --color-primary-hover: #00ac95;
+    --color-error: #CF6679;
+    --color-text: #E0E0E0;
+}
+
+body {
+    max-width: 100vw;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/*Clases genericas*/
+p {
+    font-size: 18px;
+}
+
+h1 {
+    color: var(--color-text);
+    font-size: 40px;
+}
+
+h2 {
+    font-size: 32px;
+}
+
+a {
+    color: var(--color-primary);
+}
+
+
+.text-center {
+    text-align: center;
+}
+
+.bg-light {
+    background-color: var(--color-light-background);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--color-primary);
+    text-align: left;
+}
+
+section {
+    max-width: 100vw;
+    padding: 40px 0px;
+    width: 100%;
+}
+
+.container {
+    box-sizing: border-box;
+    display: grid;
+    margin: auto;
+    max-width: 1440px;
+    padding: 0px 20px;
+}
+
+/* Navigation Menu */
+header {
+    max-width: 100vw;
+    overflow: hidden;
+}
+
+.nav-menu {
+    background-color: #373739bd;
+    backdrop-filter: blur(15px);
+    padding: 20px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.nav-links {
+    margin: 0;
+}
+
+.nav-buttons {
+    display: flex;
+    column-gap: 20px;
+}
+
+.nav-buttons a {
+    line-height: 18px;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo a {
+    color: var(--color-primary);
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 2px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 16px;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+
+.nav-links li a:hover {
+    background-color: var(--color-primary);
+    color: #020202;
+}
+
+.form-item {
+    position: relative;
+}
+
+.form-item-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: var(--color-primary);
+}
+
+/* Hero Section */
+header.hero {
+    background-image: url('../media/fondos/-FWEBP.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--color-primary);
+    padding: 100px 20px;
+    text-align: center;
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.hero-content p {
+    font-size: 1.3em;
+    margin-bottom: 40px;
+    color: #f4e1b9;
+}
+
+/* Buttons */
+[class$="-btn"] {
+    color: var(--color-primary);
+    padding: 10px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+}
+
+.transparent-btn {
+    background-color: transparent;
+    border: 2px solid var(--color-primary);
+}
+
+.transparent-btn:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #020202;
+}
+
+.color-btn {
+    background-color: var(--color-primary);
+    color: #020202 !important;
+}
+
+.color-btn:hover {
+    background-color: var(--color-primary-hover);
+
+}
+
+.logo {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+
+input,
+select,
+textarea {
+    padding: 15px 15px;
+    background-color: #19191a;
+    border: 1px solid var(--color-primary);
+    border-radius: 5px;
+    color: var(--color-primary);
+    font-size: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+input:not([type="date"]) {
+    padding: 15px 40px;
+}
+
+.form-item-icon {
+    position: absolute;
+}
+
+table th {
+    background-color: #19191a;
+}
+
+table tr:nth-child(even) {
+    background-color: #020202;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Main Content */
+main.main-content {
+    color: var(--color-primary);
+}
+
+/* Grids y cards*/
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--color-grey-light-background);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.testimonials-grid .card {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+/* About Section */
+.about-section {
+    background-image: url("../media/fondos/90.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 80px 0 !important;
+}
+
+.about-section .nosotros-card {
+    max-width: 800px;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.452);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(20px);
+}
+
+/* Footer */
+footer.footer {
+    display: block;
+    width: 100%;
+    background-color: #373739;
+    color: var(--color-primary);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.9em;
+    box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-footer {
+    width: 100px;
+    /* Tamaño del logo en el footer */
+    height: auto;
+    margin-bottom: 10px;
+}
