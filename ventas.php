@@ -15,6 +15,7 @@
         <section class="filtros">
             <div class="container">
                 <h1>Mis Ventas de Cursos</h1>
+                <a href="/crearCurso.php" class="color-btn" style="text-align:center; width:fit-content">Nuevo Curso</a>
                 <h2>Filtros</h2>
                 <form action="#">
                     <label for="fecha-inicio">Fecha de Creación (Inicio):</label>

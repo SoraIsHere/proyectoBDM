@@ -1,0 +1,54 @@
+section {
+    background-image: url('../media/fondos/Paginas-cursos-online-gratis.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: cover;
+}
+
+section .container {
+    padding: 100px 20px;
+}
+
+.contenedor-formulario {
+    background-color: #373739d2;
+    backdrop-filter: blur(20px);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 800px;
+    margin: auto;
+}
+
+h1,
+h2 {
+    margin-top: 0;
+    color: var(--color-accent);
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    background-color: var(--color-grey-light-background);
+    color: var(--color-text);
+    border: 1px solid var(--color-secondary-background);
+}
+
+.capitulo {
+    margin-bottom: 60px;
+}
+
+button {
+    cursor: pointer;
+}
+
+#contenedor-capitulos {
+    margin-top: 40px !important;
+}

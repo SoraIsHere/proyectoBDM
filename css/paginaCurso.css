@@ -1,0 +1,95 @@
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+.nav-menu {
+    position: sticky !important;
+    max-width: 100%;
+}
+
+.contenedor-curso {
+    display: flex;
+    width: 100%;
+}
+
+.barra-lateral {
+    width: 20%;
+    background-color: var(--color-secondary-background);
+    color: var(--color-text);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.barra-lateral h2 {
+    margin-top: 0;
+}
+
+.lista-temas {
+    list-style: none;
+    padding: 0;
+}
+
+.lista-temas li {
+    margin-bottom: 10px;
+}
+
+.lista-temas a {
+    color: var(--color-text);
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lista-temas a:hover {
+    text-decoration: underline;
+}
+
+.contenido-tema {
+    width: 80%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: var(--color-light-background);
+}
+
+section {
+    margin: 0;
+    padding: 0 !important;
+}
+
+h2 {
+    margin-top: 0 !important;
+}
+
+.videos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.contenedor-curso .color-btn {
+    margin-top: 20px;
+}
+
+.completado {
+    color: var(--color-primary);
+}
+
+.tema-container {
+    max-width: 600px;
+    margin: auto;
+}
+
+.img-container-curso {
+
+    text-align: center;
+}
+
+.img-curso {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    border-radius: 12px;
+}

@@ -26,19 +26,19 @@
                         <img src="media/curso1.png" alt="Curso 1">
                         <h3>Curso de Desarrollo Web</h3>
                         <p>Aprende a crear sitios web profesionales y creativos desde cero.</p>
-                        <a href="#" class="course-link">Ver más</a>
+                        <a href="/detalleCurso.php" class="course-link">Ver más</a>
                     </div>
                     <div class="card">
                         <img src="media/curso2.png" alt="Curso 2">
                         <h3>Curso de Marketing Digital</h3>
                         <p>Domina el idioma de tu preferencia y expande tu oportunidad laboral.</p>
-                        <a href="#" class="course-link">Ver más</a>
+                        <a href="/detalleCurso.php" class="course-link">Ver más</a>
                     </div>
                     <div class="card">
                         <img src="media/curso3.png" alt="Curso 3">
                         <h3>Curso de Desarrollo de Apps moviles</h3>
                         <p>Crea applicaciones útiles con herramientas profesionales.</p>
-                        <a href="#" class="course-link">Ver más</a>
+                        <a href="/detalleCurso.php" class="course-link">Ver más</a>
                     </div>
                     <!-- Más cursos -->
                 </div>

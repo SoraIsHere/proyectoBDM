@@ -1,0 +1,52 @@
+/* Hero Section */
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+header.curso-hero {
+    background-color: var(--color-grey-light-background);
+    color: var(--color-primary);
+    margin-top: 80px;
+    padding: 50px 20px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+header.curso-hero img {
+    border-radius: 12px;
+}
+
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.hero-content p {
+    font-size: 1.3em;
+    margin-bottom: 40px;
+    color: #f4e1b9;
+}
+
+/***/
+
+section.detalle-curso {
+    padding-top: 80px;
+}
+
+section.detalle-curso .texto {
+    background-color: var(--color-grey-light-background);
+    padding: 40px;
+    border-radius: 12px;
+}

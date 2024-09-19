@@ -5,6 +5,12 @@ html {
     scroll-behavior: smooth;
 }
 
+textarea{
+    max-width: 100%;
+    box-sizing: border-box;
+    min-width: 100%;
+}
+
 :root {
     --color-background: #1F1F1F;
     --color-secondary-background: #121212;
@@ -78,6 +84,7 @@ section {
     margin: auto;
     max-width: 1440px;
     padding: 0px 20px;
+    width: 100%;
 }
 
 /* Navigation Menu */
@@ -87,8 +94,8 @@ header {
 }
 
 .nav-menu .logo-container img {
-    margin-top: -10px!IMPORTANT;
-    margin-bottom: -10px!IMPORTANT;
+    margin-top: -10px !IMPORTANT;
+    margin-bottom: -10px !IMPORTANT;
 }
 
 .nav-menu {
@@ -97,6 +104,7 @@ header {
     padding: 20px 20px;
     position: fixed;
     width: 100%;
+    max-width: 100vw;
     top: 0;
     z-index: 1000;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
@@ -111,16 +119,20 @@ header {
     column-gap: 20px;
     flex: 1;
     justify-content: end;
+    align-items: center;
 }
 
 .nav-buttons a {
     line-height: 18px;
+    height: fit-content;
 }
 
 .nav-container {
     display: flex;
     align-items: center;
     max-width: 1200px;
+    width: 90%;
+    padding-right: 20px;
     margin: 0 auto;
 }
 
@@ -152,6 +164,50 @@ header {
     color: #020202;
 }
 
+.icon-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.icon-menu img {
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+.icon-menu:hover .menu-flotante {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.icon-menu .menu-flotante {
+    position: absolute;
+    background: var(--color-grey-light-background);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    top: 70px;
+    border-radius: 8px;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 200ms;
+}
+
+.icon-menu .menu-flotante a {
+    border: none;
+    text-decoration: none;
+    width: 100%;
+    padding: 5px;
+    transition: all 200ms;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.icon-menu .menu-flotante a:hover {
+    background-color: rgb(72, 72, 72);
+}
+
+/**/
 .form-item {
     position: relative;
 }
