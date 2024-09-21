@@ -70,9 +70,17 @@
                 <div class="texto mt-5">
                     <h2>Comentarios</h2>
                     <form id="commentForm" class="mb-4">
-                        <div class="mb-3">
-                            <label for="userRating" class="form-label">Calificación (1-5)</label>
-                            <input type="number" class="form-control" id="userRating" min="1" max="5" required>
+                        <div class="mb-3 mt-4">
+                            <label for="rating" class="form-label">Calificación</label>
+
+                            <select id="rating" name="rating" required>
+                                <option disabled selected value="">Selecciona una calificación</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="commentContent" class="form-label">Comentario</label>
