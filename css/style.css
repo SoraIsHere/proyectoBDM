@@ -5,7 +5,7 @@ html {
     scroll-behavior: smooth;
 }
 
-textarea{
+textarea {
     max-width: 100%;
     box-sizing: border-box;
     min-width: 100%;
@@ -21,6 +21,7 @@ textarea{
     --color-primary-hover: #00ac95;
     --color-error: #CF6679;
     --color-text: #E0E0E0;
+    --color-text-secondary: #f4e1b9;
 }
 
 body {
@@ -50,6 +51,7 @@ h2 {
 a {
     color: var(--color-primary);
 }
+
 a:hover {
     color: var(--color-primary);
 }
@@ -311,10 +313,10 @@ input,
 select,
 textarea {
     padding: 15px 15px;
-    background-color: #19191a;
-    border: 1px solid var(--color-primary);
+    background-color: #19191a!important;
+    border: 1px solid var(--color-primary)!important;
     border-radius: 5px;
-    color: var(--color-primary);
+    color: var(--color-primary)!important;
     font-size: 1rem;
     box-sizing: border-box;
     width: 100%;

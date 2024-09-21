@@ -109,6 +109,7 @@
                             <th>Última Fecha de Ingreso</th>
                             <th>Progreso</th>
                             <th>Estado</th>
+                            <th>Fecha de finalizacion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -119,6 +120,7 @@
                             <td>15/08/2024</td>
                             <td>50%</td>
                             <td>En Progreso</td>
+                            <td> - </td>
                         </tr>
                         <tr>
                             <td>Marketing Digital</td>
@@ -127,6 +129,7 @@
                             <td>22/07/2024</td>
                             <td>100%</td>
                             <td>Completado</td>
+                            <td>22/07/2024</td>
                         </tr>
                         <!-- Agrega más cursos según sea necesario -->
                     </tbody>

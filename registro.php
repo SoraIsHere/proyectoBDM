@@ -15,7 +15,7 @@
 <body>
     <main>
         <div class="login-card-container">
-            <div class="login-card">
+            <div class="login-card" style="margin: 100px 0!important;">
                 <div class="login-card-logo text-center">
                     <img src="media/logo.png" alt="logo">
                 </div>

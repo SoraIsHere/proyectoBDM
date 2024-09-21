@@ -38,7 +38,7 @@
                     <button type="submit" class="color-btn">Sign In</button>
                 </form>
                 <div class="login-card-footer">
-                    No tienes una cuenta? <a href="#">Crea una cuenta!.</a>
+                    No tienes una cuenta? <a href="/registro.php">Crea una cuenta!.</a>
                 </div>
             </div>
 

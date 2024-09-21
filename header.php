@@ -19,13 +19,13 @@
                 <img src="/media/curso1.jpg" alt="Logo de WebLearning" class="logo-footer" style="height: 50px; width:50px; aspect-ratio: 1; margin: 0px;">
                 <div class="menu-flotante">
                     <a href="/kardex.php">
-                        Perfil
+                        Perfil (todos)
                     </a>
                     <a href="/reportes.php">
-                        Reportes
+                        Reportes (admin)
                     </a>
                     <a href="/ventas.php">
-                        Ventas
+                        Ventas (instructor)
                     </a>
                     <a href="/mensajes.php">
                         Mensajes

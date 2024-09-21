@@ -36,7 +36,6 @@
                     </video>
                 </div>
                 <div class="" style="width:100%; text-align:right">
-
                     <button class="color-btn" onclick="location.href='#tema2'">Siguiente </button>
                 </div>
             </section>

@@ -5,7 +5,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     background-image: url('../media/fondos/Paginas-cursos-online-gratis.png');
     background-repeat: no-repeat;
     background-position: left center;
@@ -18,7 +18,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 /* Login Card Styles */

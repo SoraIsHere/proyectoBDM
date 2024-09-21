@@ -44,7 +44,7 @@
 
         <section id="cursos" class="courses-section">
             <div class="container">
-                <h2>Resultados de la Búsqueda </h2>
+                <h2 class="mb-4">Resultados de la Búsqueda </h2>
                 <div class="card-grid">
                     <div class="card">
                         <img src="media/curso1.png" alt="Curso 1">

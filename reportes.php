@@ -22,14 +22,14 @@
                         <option value="instructor">Instructor</option>
                         <option value="estudiante">Estudiante</option>
                     </select>
-                    <button class="color-btn mt-4" type="submit" >Generar Reporte</button>
+                    <button class="color-btn mt-4" type="submit">Generar Reporte</button>
                 </form>
             </div>
         </section>
 
-        <section class="resultados">
+        <section class="resultados" id="instructores">
             <div class="container">
-                <h2>Resultados del Reporte</h2>
+                <h2>Resultados del Reporte de Instructor</h2>
                 <table id="tabla-usuarios">
                     <!-- Ejemplo de tabla para instructores -->
                     <thead>
@@ -55,6 +55,41 @@
                             <td>10 Ago 2023</td>
                             <td>3</td>
                             <td>$8,765.43</td>
+                        </tr>
+                        <!-- Agrega más filas según los resultados obtenidos -->
+                    </tbody>
+                    <!-- Ejemplo de tabla para estudiantes -->
+                    <!-- Cambia el contenido de la tabla según el tipo de usuario seleccionado -->
+                </table>
+            </div>
+
+            <div class="container" id="alumnos">
+                <h2>Resultados del Reporte de Alumnos</h2>
+                <table id="tabla-usuarios">
+                    <!-- Ejemplo de tabla para instructores -->
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Nombre</th>
+                            <th>Fecha de Ingreso</th>
+                            <th>Cursos Inscrutos</th>
+                            <th>Cursos terminados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>jperez</td>
+                            <td>Juan Pérez</td>
+                            <td>15 Jul 2022</td>
+                            <td>5</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>mlopez</td>
+                            <td>María López</td>
+                            <td>10 Ago 2023</td>
+                            <td>3</td>
+                            <td>0</td>
                         </tr>
                         <!-- Agrega más filas según los resultados obtenidos -->
                     </tbody>

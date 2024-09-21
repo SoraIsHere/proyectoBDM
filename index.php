@@ -21,26 +21,66 @@
         <section id="cursos" class="courses-section">
             <div class="container">
                 <h2>Nuestros Cursos</h2>
+                <ul class="list-group mb-4 mt-4 d-flex flex-row">
+                    <li class="list-group-item bg-transparent ">
+                        <a href="#" class="transparent-btn">Desarrollo Web</a>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <a href="#" class="transparent-btn">Diseño UX/UI</a>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <a href="#" class="transparent-btn">Marketing Digital</a>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <a href="#" class="transparent-btn">Programación</a>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <a href="#" class="transparent-btn">Bases de Datos</a>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <a href="#" class="transparent-btn">Inteligencia Artificial</a>
+                    </li>
+                </ul>
+                <div class="busqueda my-4">
+                    <form class="d-flex" action="/busquedas.php">
+                        <input type="text" id="titulo" name="titulo" placeholder="Buscar por título"><button type="submit" class="transparent-btn">Buscar</button>
+                    </form>
+                </div>
                 <div class="card-grid">
                     <div class="card">
                         <img src="media/curso1.png" alt="Curso 1">
                         <h3>Curso de Desarrollo Web</h3>
                         <p>Aprende a crear sitios web profesionales y creativos desde cero.</p>
-                        <a href="/detalleCurso.php" class="course-link">Ver más</a>
+                        <a href="/detalleCurso.php" class="course-link fw-bold text-white">Ver más</a>
+                        <div class="mt-3">
+                            <a href="#" class="">Inteligencia Artificial</a>,
+                            <a href="#" class="">Programacion</a>
+                        </div>
                     </div>
                     <div class="card">
                         <img src="media/curso2.png" alt="Curso 2">
                         <h3>Curso de Marketing Digital</h3>
                         <p>Domina el idioma de tu preferencia y expande tu oportunidad laboral.</p>
-                        <a href="/detalleCurso.php" class="course-link">Ver más</a>
+                        <a href="/detalleCurso.php" class="course-link fw-bold text-white">Ver más</a>
+                        <div class="mt-3">
+                            <a href="#" class="">Inteligencia Artificial</a>,
+                            <a href="#" class="">Programacion</a>
+                        </div>
                     </div>
                     <div class="card">
                         <img src="media/curso3.png" alt="Curso 3">
                         <h3>Curso de Desarrollo de Apps moviles</h3>
                         <p>Crea applicaciones útiles con herramientas profesionales.</p>
-                        <a href="/detalleCurso.php" class="course-link">Ver más</a>
+                        <a href="/detalleCurso.php" class="course-link fw-bold text-white">Ver más</a>
+                        <div class="mt-3">
+                            <a href="#" class="">Inteligencia Artificial</a>,
+                            <a href="#" class="">Programacion</a>
+                        </div>
                     </div>
                     <!-- Más cursos -->
+                </div>
+                <div class="text-center d-flex justify-content-center">
+                    <a href="/busquedas.php" class="transparent-btn mt-4">Ver todos</a>
                 </div>
             </div>
         </section>
