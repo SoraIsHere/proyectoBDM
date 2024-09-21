@@ -22,7 +22,7 @@
                         <option value="instructor">Instructor</option>
                         <option value="estudiante">Estudiante</option>
                     </select>
-                    <button class="color-btn" type="submit" style="margin-top: 20px">Generar Reporte</button>
+                    <button class="color-btn mt-4" type="submit" >Generar Reporte</button>
                 </form>
             </div>
         </section>

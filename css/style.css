@@ -50,7 +50,9 @@ h2 {
 a {
     color: var(--color-primary);
 }
-
+a:hover {
+    color: var(--color-primary);
+}
 
 .text-center {
     text-align: center;
@@ -205,6 +207,7 @@ header {
 
 .icon-menu .menu-flotante a:hover {
     background-color: rgb(72, 72, 72);
+    color: var(--color-primary);
 }
 
 /**/
@@ -267,7 +270,7 @@ header.hero::before {
 }
 
 /* Buttons */
-[class$="-btn"] {
+[class*="-btn"] {
     color: var(--color-primary);
     padding: 10px 25px;
     border-radius: 5px;

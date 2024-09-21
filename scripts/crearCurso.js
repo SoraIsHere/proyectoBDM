@@ -19,7 +19,7 @@ function agregarCapitulo() {
         <label for="capitulos[${contadorCapitulos}][videos]">Videos:</label>
         <input type="file" id="capitulos[${contadorCapitulos}][videos]" name="capitulos[${contadorCapitulos}][videos][]" multiple>
 
-        <button type="button" style="margin-top: 20px;" class="color-btn" onclick="borrarCapitulo(${contadorCapitulos})">Borrar Capítulo</button>
+        <button type="button mt-4" class="color-btn" onclick="borrarCapitulo(${contadorCapitulos})">Borrar Capítulo</button>
     `;
     contenedorCapitulos.appendChild(nuevoCapitulo);
 }
@@ -28,12 +28,12 @@ function borrarCapitulo(numeroCapitulo) {
     if (numeroCapitulo > 1) {
         const capitulo = document.getElementById(`capitulo-${numeroCapitulo}`);
         capitulo.remove();
-    } 
+    }
 }
 
 document.getElementById('formulario-curso').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    
+
     alert('Curso guardado exitosamente');
 });

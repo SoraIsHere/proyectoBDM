@@ -37,7 +37,7 @@
                     <label for="fecha-fin">Fecha de Publicación (Fin):</label>
                     <input type="date" id="fecha-fin" name="fecha-fin">
 
-                    <button type="submit" class="color-btn" style="margin-top: 20px">Buscar</button>
+                    <button type="submit" class="color-btn mt-4">Buscar</button>
                 </form>
             </div>
         </section>

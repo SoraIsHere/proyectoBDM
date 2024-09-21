@@ -14,8 +14,10 @@
     <main style="margin: 100px 0 30px">
         <section class="filtros">
             <div class="container">
-                <h1>Mis Ventas de Cursos</h1>
-                <a href="/crearCurso.php" class="color-btn" style="text-align:center; width:fit-content">Nuevo Curso</a>
+                <div class="mb-5">
+                    <h1 class="m-0">Mis Ventas de Cursos</h1>
+                    <a href="/crearCurso.php" class="color-btn mt-4 d-block" style="text-align:center; width:fit-content">Nuevo Curso</a>
+                </div>
                 <h2>Filtros</h2>
                 <form action="#">
                     <label for="fecha-inicio">Fecha de Creación (Inicio):</label>
@@ -39,7 +41,7 @@
                         <option value="activos">Solo Activos</option>
                     </select>
 
-                    <button type="submit" class="color-btn" style="margin-top:20px">Aplicar Filtros</button>
+                    <button type="submit" class="color-btn mt-4">Aplicar Filtros</button>
                 </form>
             </div>
         </section>

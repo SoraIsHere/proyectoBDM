@@ -52,8 +52,8 @@
                         </tbody>
                     </table>
                     <div style="width: 100%; text-align:center">
-                        <a type="button" href="/curso.php" class="transparent-btn" style="margin-top:20px; display:block">Comprar todo el curso</a>
-                        <a type="button" href="/diploma.php" class="color-btn" style="margin-top:20px; display:block">Curso completado!</a>
+                        <a type="button" href="/curso.php" class="mt-4 transparent-btn" style=" display:block">Comprar todo el curso</a>
+                        <a type="button" href="/diploma.php" class="mt-4 color-btn" style=" display:block">Curso completado!</a>
                     </div>
                 </div>
             </div>
