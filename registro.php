@@ -24,7 +24,8 @@
                     <div>llena los formularios para unirte y disfrutar de nuestros cursos o compartir tu conocimiento si eres maestro.
                     </div>
                 </div>
-                <form class="login-card-form">
+                <form id="registerForm" class ="login-card-form">
+
                     <div class="campos">
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">person</span>
@@ -88,6 +89,7 @@
             </div>
         </div>
     </main>
+    <script src="validaciones.js"></script>
 </body>
 
 <?php include("footer.php") ?>
