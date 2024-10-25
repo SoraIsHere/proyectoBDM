@@ -24,15 +24,15 @@
                     <h1>Iniciar Sesión</h1>
                     <div>Inicie sesión para poder obtener acceso completo a nuestros cursos</div>
                 </div>
-                <form class="login-card-form">
+                <form class="login-card-form" method="POST" action="/controladores/Login.php" >
                     <div class="form-item">
                         <span class="form-item-icon material-symbols-rounded">mail</span>
-                        <input type="text" placeholder="Enter Email" id="emailForm"
+                        <input type="text" name="email" placeholder="Enter Email" id="emailForm"
                             autofocus required>
                     </div>
                     <div class="form-item">
                         <span class="form-item-icon material-symbols-rounded">lock</span>
-                        <input type="password" placeholder="Enter Password" id="passwordForm"
+                        <input type="password" name="contraseña" placeholder="Enter Password" id="passwordForm"
                             required>
                     </div>
                     <button type="submit" class="color-btn">Sign In</button>

@@ -24,28 +24,23 @@
                     <div>llena los formularios para unirte y disfrutar de nuestros cursos o compartir tu conocimiento si eres maestro.
                     </div>
                 </div>
-                <form id="registerForm" class ="login-card-form">
-
+                <form id="registerForm" class="login-card-form" method="POST" action="/controladores/RegistroUsuarios.php" enctype="multipart/form-data">
                     <div class="campos">
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">person</span>
-                            <input type="text" placeholder="Nombre" id="nameForm" required>
+                            <input type="text" name="nombre" placeholder="Nombre" id="nameForm" required>
                         </div>
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">person</span>
-                            <input type="text" placeholder="Apellido paterno" id="lastNameForm" required>
-                        </div>
-                        <div class="form-item">
-                            <span class="form-item-icon material-symbols-rounded">person</span>
-                            <input type="text" placeholder="Apellido materno" id="middleNameForm" required>
+                            <input type="text" placeholder="Apellidos" name="apellido" id="lastNameForm" required>
                         </div>
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">mail</span>
-                            <input type="text" placeholder="Email" id="emailForm" required>
+                            <input type="text" placeholder="Email" name="email" id="emailForm" required>
                         </div>
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">lock</span>
-                            <input type="password" placeholder="Contraseña" id="passwordForm" required>
+                            <input type="password" placeholder="Contraseña" name="contrasena" id="passwordForm" required>
                         </div>
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">lock</span>
@@ -53,30 +48,26 @@
                         </div>
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">image</span>
-                            <input type="file" id="profileImage" accept="image/*">
-                        </div>
-                        <div class="form-item">
-                            <span class="form-item-icon material-symbols-rounded">person</span>
-                            <input type="text" placeholder="Nombre de usuario" id="usernameForm" required>
+                            <input type="file" id="profileImage" name="imagen" accept="image/*">
                         </div>
                         <div class="form-item">
                             <label for="roleForm">Selecciona el rol con el que quieras interactuar</label>
-                            <select id="roleForm" required>
-                                <option value="student">Estudiante</option>
-                                <option value="teacher">Profesor</option>
+                            <select id="roleForm" name="rol" required>
+                                <option value="Estudiante">Estudiante</option>
+                                <option value="Instructor">Profesor</option>
                             </select>
                         </div>
                         <div class="form-item">
                             <label for="genderForm">Género</label>
-                            <select id="genderForm" required>
-                                <option value="male">Hombre</option>
-                                <option value="female">Mujer</option>
-                                <option value="other">Otro</option>
+                            <select id="genderForm" name="genero" required>
+                                <option value="M">Hombre</option>
+                                <option value="F">Mujer</option>
+                                <option value="Otro">Otro</option>
                             </select>
                         </div>
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">calendar_today</span>
-                            <input type="date" id="dobForm" required>
+                            <input name="fechaNacimiento" type="date" id="dobForm" required>
                         </div>
                     </div>
                     <div class="text-center">

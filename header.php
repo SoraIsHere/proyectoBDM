@@ -1,3 +1,21 @@
+<?php
+session_start();
+include 'modelos/Usuarios.php';
+
+$usuarioLoggeado = false;
+if (isset($_SESSION['usuarioLoggeado'])) {
+    $usuarioLoggeado = unserialize($_SESSION['usuarioLoggeado']);
+    // Convertir el BLOB de la imagen a base64
+    $fotoBase64 = base64_encode($usuarioLoggeado->foto);
+    // Obtener el tipo MIME de la imagen (asumiendo que es png en este ejemplo)
+    $mimeType = 'image/png';
+    // Crear la URL de datos base64
+    $fotoUrl = 'data:' . $mimeType . ';base64,' . $fotoBase64;
+}
+?>
+
+
+
 <!--BOOTSTRAP-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <!--**-->
@@ -13,10 +31,15 @@
             <li><a href="/">Inicio</a></li>
         </ul>
         <div class="nav-buttons">
+            <?php if($usuarioLoggeado == null){?>
             <a href="inisesion.php" class="color-btn">Iniciar Sesión</a>
             <a href="registro.php" class="transparent-btn">Registrarse</a>
+            <?php } else{ echo($usuarioLoggeado->nombre); ?>
             <div class="icon-menu">
-                <img src="/media/curso1.jpg" alt="Logo de WebLearning" class="logo-footer" style="height: 50px; width:50px; aspect-ratio: 1; margin: 0px;">
+                <?php
+                  echo '<img src="' . $fotoUrl . '" alt="Foto del Usuario" class="logo-footer" style="height: 50px; width:50px; aspect-ratio: 1; margin: 0px;">';
+                ?>
+              
                 <div class="menu-flotante">
                     <a href="/kardex.php">
                         Perfil (todos)
@@ -35,6 +58,7 @@
                     </a>
                 </div>
             </div>
+            <?php } ?>
         </div>
     </div>
 </nav>
