@@ -46,12 +46,13 @@
                     <p>Género: <?php echo $usuarioLoggeado->genero ?></p>
                     <p>Email: <?php echo $usuarioLoggeado->email ?></p>
                     <a type="button" style="margin: 0px 5px" href="#editarDatos" class="color-btn">Editar datos</a>
-                    <a type="button" style="margin: 0px 5px" class="color-btn"
-                        href="/api/userInfo?id=<?php echo $usuarioLoggeado->usuarioID ?>" target="_blank">Bajar mi
-                        informacion</a>
+                    <a type="button" style="margin: 0px 5px" id="borrarCuenta" href="/controladores/BorrarMiCuenta.php"
+                        class="color-btn" onclick="return confirmarBorrado()">Borrar mi cuenta</a>
                     <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>
-                        <a type="button" style="margin: 0px 5px" id="borrarCuenta" href="/controladores/BorrarMiCuenta.php"
-                            class="color-btn" onclick="return confirmarBorrado()">Borrar mi cuenta</a>
+                        <a type="button" style="margin: 0px 5px" class="color-btn"
+                            href="/api/userInfo.php?usuarioID=<?php echo $usuarioLoggeado->usuarioID ?>" target="_blank">Bajar mi
+                            informacion</a>
+
                     <?php } ?>
                 </div>
             </div>
