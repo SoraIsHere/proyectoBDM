@@ -1,5 +1,5 @@
 window.onload = function() {
-    alert("La página web está funcionando correctamente.");
+    //alert("La página web está funcionando correctamente.");
 };
 
 document.getElementById('registerForm').addEventListener('submit', function(event) {

@@ -27,9 +27,6 @@ class Usuario {
         $this->fechaEliminacion = $fechaEliminacion;
     }
 
-    // Getters and Setters
-    // (se mantienen igual que en tu versión anterior)
-
     // Implementar métodos de la interfaz Serializable
     public function serialize() {
         return serialize([
