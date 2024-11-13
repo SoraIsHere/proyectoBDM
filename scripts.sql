@@ -134,23 +134,22 @@ BEGIN
 END$$
 
 DELIMITER $$
-
 CREATE PROCEDURE InsertarCurso(
     IN p_Nombre VARCHAR(100),
     IN p_CostoGeneral DECIMAL(10,2),
     IN p_Descripcion TEXT,
-    IN p_Calificacion INT,
     IN p_CategoriaID INT,
     IN p_CreadorID INT,
-    IN p_Imagen LONGBLOB
+    IN p_Imagen LONGBLOB,
+    OUT p_CursoID INT
 )
 BEGIN
     INSERT INTO Curso (Nombre, CostoGeneral, Descripcion, Calificacion, CategoriaID, CreadorID, Imagen, FechaCreacion, BorradoLogico)
-    VALUES (p_Nombre, p_CostoGeneral, p_Descripcion, p_Calificacion, p_CategoriaID, p_CreadorID, p_Imagen, CURRENT_DATE, FALSE);
+    VALUES (p_Nombre, p_CostoGeneral, p_Descripcion, 1, p_CategoriaID, p_CreadorID, p_Imagen, CURRENT_DATE, FALSE);
+    SET p_CursoID = LAST_INSERT_ID();
 END$$
 
 DELIMITER $$
-
 CREATE PROCEDURE InsertarLeccion(
     IN p_Nombre VARCHAR(100),
     IN p_Costo DECIMAL(10,2),

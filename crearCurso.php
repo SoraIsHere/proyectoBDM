@@ -16,33 +16,33 @@
         <div class="container">
             <div class="contenedor-formulario">
                 <h1>Crear Curso</h1>
-                <form id="formulario-curso">
+                <form id="formulario-curso" action="/controladores/CrearCurso.php" method="POST" enctype="multipart/form-data">
                     <label for="nombre-curso">Nombre del Curso:</label>
-                    <input type="text" id="nombre-curso" name="nombre-curso" required>
+                    <input type="text" id="nombre-curso" name="nombre" required>
 
-                    <label for="descripcion-corta">Descripción Corta:</label>
-                    <textarea id="descripcion-corta" name="descripcion-corta" required></textarea>
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" required></textarea>
 
-                    <label for="descripcion-larga">Descripción Larga:</label>
-                    <textarea id="descripcion-larga" name="descripcion-larga" required></textarea>
-
-                    <label for="precio">Precio:</label>
-                    <input type="number" id="precio" name="precio" min="0" required>
-
+                    <label for="precio">Costo:</label>
+                    <input type="number" id="costo" name="precio" min="0" required>
+                    <label for="imagen">Imagen:</label>
+                    <input type="file" id="profileImage" name="imagen" accept="image/*" required>
+                    <label for="categoria">Categoria:</label>
+                    <select name="categoria" required>
+                        <option value="1">Web</option>
+                    </select>
+                    
                     <div id="contenedor-capitulos">
                         <h2>Capítulos</h2>
                         <div class="capitulo" id="capitulo-1">
                             <label for="capitulos[0][titulo]">Título del Capítulo:</label>
                             <input type="text" id="capitulos[0][titulo]" name="capitulos[0][titulo]" required>
-
-                            <label for="capitulos[0][contenido]">Contenido del Capítulo:</label>
-                            <textarea id="capitulos[0][contenido]" name="capitulos[0][contenido]" required></textarea>
-
-                            <label for="capitulos[0][imagenes]">Imágenes:</label>
-                            <input type="file" id="capitulos[0][imagenes]" name="capitulos[0][imagenes][]" multiple>
-
-                            <label for="capitulos[0][videos]">Videos:</label>
-                            <input type="file" id="capitulos[0][videos]" name="capitulos[0][videos][]" multiple>
+                            <label for="capitulos[0][Descripcion]">Descripcion:</label>
+                            <textarea id="capitulos[0][Descripcion]" name="capitulos[0][contenido]" required></textarea>
+                            <label for="capitulos[0][video]">Video:</label>
+                            <input type="file" id="capitulos[0][video]" name="capitulos[0][video]" required>
+                            <label for="capitulos[0][precio]">Costo:</label>
+                            <input type="number" id="costo" name="capitulos[0][precio]" min="0" required>
                         </div>
                     </div>
 

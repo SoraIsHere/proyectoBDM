@@ -24,7 +24,7 @@
                     <div>llena los formularios para unirte y disfrutar de nuestros cursos o compartir tu conocimiento si eres maestro.
                     </div>
                 </div>
-                <form id="registerForm" class="login-card-form" method="POST" action="/controladores/RegistroUsuarios.php" enctype="multipart/form-data">
+                <form id="registerForm" class="login-card-form" method="POST" enctype="multipart/form-data" action="/controladores/RegistroUsuarios.php" >
                     <div class="campos">
                         <div class="form-item">
                             <span class="form-item-icon material-symbols-rounded">person</span>

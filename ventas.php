@@ -133,5 +133,14 @@
 
     <?php include("footer.php") ?>
 </body>
-
+<script>window.onload = function() {
+    // Obtener los parámetros de la URL
+    const params = new URLSearchParams(window.location.search);
+    
+    // Verificar si el parámetro 'creado' existe y es igual a 'true'
+    if (params.get('creado') === 'true') {
+        alert('Curso creado con éxito');
+    }
+}
+</script>
 </html>
