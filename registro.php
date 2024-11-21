@@ -55,6 +55,7 @@
                             <select id="roleForm" name="rol" required>
                                 <option value="Estudiante">Estudiante</option>
                                 <option value="Instructor">Profesor</option>
+                                <!-- <option value="Administrador">Administrador</option> -->
                             </select>
                         </div>
                         <div class="form-item">

@@ -10,13 +10,36 @@
 
 <?php include("header.php") ?>
 
+<?php
+
+include('conectarBD.php');
+include 'modelos/Categorias.php';
+$database = new db();
+$conexion = $database->conectarBD();
+$sql = "CALL ObtenerCategorias()";
+$result = mysqli_query($conexion, $sql);
+if (!$result) {
+    die('Error: ' . mysqli_error($conexion));
+}
+$categorias = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $categoria = new Categoria($row['CategoriaID'], $row['Nombre'], $row['Descripcion'], $row['CreadorID'], $row['FechaCreacion'], $row['BorradoLogico'], $row['FechaEliminacion']);
+    $categorias[] = $categoria;
+}
+mysqli_close($conexion);
+
+?>
+
+
 <body>
     <main style="margin: 100px 0 30px">
         <section class="filtros">
             <div class="container">
                 <div class="mb-5">
                     <h1 class="m-0">Mis Ventas de Cursos</h1>
-                    <a href="/crearCurso.php" class="color-btn mt-4 d-block" style="text-align:center; width:fit-content">Nuevo Curso</a>
+                    <a href="/crearCurso.php" class="color-btn mt-4 d-block"
+                        style="text-align:center; width:fit-content">Nuevo Curso</a>
+
                 </div>
                 <h2>Filtros</h2>
                 <form action="#">
@@ -28,11 +51,12 @@
 
                     <label for="categoria">Categoría:</label>
                     <select id="categoria" name="categoria">
-                        <option value="todas">Todas</option>
-                        <option value="it-software">IT & Software</option>
-                        <option value="marketing">Marketing</option>
-                        <option value="design">Design</option>
-                        <!-- Agrega más categorías según sea necesario -->
+                        <option value="">Todas</option>
+                        <?php foreach ($categorias as $categoria): ?>
+                            <option value="<?php echo $categoria->categoriaID; ?>">
+                                <?php echo htmlspecialchars($categoria->nombre); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
 
                     <label for="estado">Estado del Curso:</label>
@@ -133,14 +157,15 @@
 
     <?php include("footer.php") ?>
 </body>
-<script>window.onload = function() {
-    // Obtener los parámetros de la URL
-    const params = new URLSearchParams(window.location.search);
-    
-    // Verificar si el parámetro 'creado' existe y es igual a 'true'
-    if (params.get('creado') === 'true') {
-        alert('Curso creado con éxito');
+<script>window.onload = function () {
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        // Verificar si el parámetro 'creado' existe y es igual a 'true'
+        if (params.get('creado') === 'true') {
+            alert('Curso creado con éxito');
+        }
     }
-}
 </script>
+
 </html>

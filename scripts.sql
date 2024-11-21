@@ -517,7 +517,7 @@ DELIMITER $$
 
 CREATE PROCEDURE ObtenerCategorias()
 BEGIN
-    SELECT CategoriaID, Nombre, Descripcion
+    SELECT CategoriaID, Nombre, Descripcion, CreadorID, FechaCreacion, BorradoLogico, FechaEliminacion
     FROM Categoria
     WHERE BorradoLogico = FALSE;
 END$$
@@ -541,8 +541,22 @@ BEGIN
     END IF;
 END$$
 
-DELIMITER ;
+DELIMITER $$
 
+CREATE PROCEDURE ObtenerCategoriasUsuario(
+ IN p_Usuario INT)
+BEGIN
+    SELECT CategoriaID, Nombre, Descripcion, CreadorID, FechaCreacion, BorradoLogico, FechaEliminacion
+    FROM Categoria
+    WHERE BorradoLogico = FALSE and CreadorID = p_Usuario;
+END$$
 
+DELIMITER $$
 
-
+create  PROCEDURE ObtenerCategoria(
+ IN p_idCat INT)
+BEGIN
+    SELECT CategoriaID, Nombre, DescripcionCategoriaID, Nombre, Descripcion, CreadorID, FechaCreacion, BorradoLogico, FechaEliminacion
+    FROM Categoria
+    WHERE CategoriaID = p_idCat;
+END$$

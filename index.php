@@ -6,6 +6,24 @@
     <meta charset="UTF-8">
     <title>WebLearning</title>
 </head>
+<?php
+include('conectarBD.php');
+include 'modelos/Categorias.php';
+$database = new db();
+$conexion = $database->conectarBD();
+$sql = "CALL ObtenerCategorias()";
+$result = mysqli_query($conexion, $sql);
+if (!$result) {
+    die('Error: ' . mysqli_error($conexion));
+}
+$categorias = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $categoria = new Categoria($row['CategoriaID'], $row['Nombre'], $row['Descripcion'], $row['CreadorID'], $row['FechaCreacion'], $row['BorradoLogico'], $row['FechaEliminacion']);
+    $categorias[] = $categoria;
+}
+mysqli_close($conexion);
+
+?>
 
 <body>
     <header class="hero">
@@ -22,28 +40,19 @@
             <div class="container">
                 <h2>Nuestros Cursos</h2>
                 <ul class="list-group mb-4 mt-4 d-flex flex-row">
-                    <li class="list-group-item bg-transparent ">
-                        <a href="#" class="transparent-btn">Desarrollo Web</a>
-                    </li>
-                    <li class="list-group-item bg-transparent">
-                        <a href="#" class="transparent-btn">Diseño UX/UI</a>
-                    </li>
-                    <li class="list-group-item bg-transparent">
-                        <a href="#" class="transparent-btn">Marketing Digital</a>
-                    </li>
-                    <li class="list-group-item bg-transparent">
-                        <a href="#" class="transparent-btn">Programación</a>
-                    </li>
-                    <li class="list-group-item bg-transparent">
-                        <a href="#" class="transparent-btn">Bases de Datos</a>
-                    </li>
-                    <li class="list-group-item bg-transparent">
-                        <a href="#" class="transparent-btn">Inteligencia Artificial</a>
-                    </li>
+                    <?php foreach ($categorias as $categoria): ?>
+                        <li class="list-group-item bg-transparent ">
+                            <a href="/search?cat=<?php echo $categoria->categoriaID; ?>"
+                                class="transparent-btn"><?php echo htmlspecialchars($categoria->nombre); ?></a>
+                        </li>
+                    <?php endforeach; ?>
+
+
                 </ul>
                 <div class="busqueda my-4">
                     <form class="d-flex" action="/busquedas.php">
-                        <input type="text" id="titulo" name="titulo" placeholder="Buscar por título"><button type="submit" class="transparent-btn">Buscar</button>
+                        <input type="text" id="titulo" name="titulo" placeholder="Buscar por título"><button
+                            type="submit" class="transparent-btn">Buscar</button>
                     </form>
                 </div>
                 <div class="card-grid">
@@ -89,9 +98,12 @@
             <div class="container">
                 <div class="nosotros-card">
                     <h2>Sobre Nosotros</h2>
-                    <p>Somos una plataforma dedicada a facilitar a los docentes la creación y gestión de cursos en línea.
-                        Nuestro objetivo es proporcionar herramientas simples y eficientes para que los educadores puedan
-                        compartir su conocimiento de manera accesible y efectiva. Al mismo tiempo, buscamos ofrecer a los
+                    <p>Somos una plataforma dedicada a facilitar a los docentes la creación y gestión de cursos en
+                        línea.
+                        Nuestro objetivo es proporcionar herramientas simples y eficientes para que los educadores
+                        puedan
+                        compartir su conocimiento de manera accesible y efectiva. Al mismo tiempo, buscamos ofrecer a
+                        los
                         estudiantes la oportunidad de acceder a una amplia variedad de cursos desde cualquier lugar y en
                         cualquier momento, haciendo que el aprendizaje sea más inclusivo y al alcance de todos.</p>
                 </div>
