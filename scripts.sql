@@ -483,38 +483,50 @@ BEGIN
 END$$
 
 DELIMITER $$
-
 CREATE PROCEDURE ObtenerCursosInicio(
-    IN p_Criterio INT
+    IN p_Criterio INT,
+    IN p_Limit INT
 )
 BEGIN
-    IF p_Criterio = 0 THEN /*mejor calificados*/
-        SELECT CursoID, Nombre, CostoGeneral, Descripcion, Calificacion, CategoriaID, Imagen
+    IF p_Limit IS NULL OR p_Limit = 0 THEN
+        SET p_Limit = 3; 
+    END IF;
+
+    IF p_Criterio = 0 THEN /* mejor calificados */
+        SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre
         FROM Curso
-        WHERE BorradoLogico = FALSE
-        ORDER BY Calificacion DESC;
-    ELSEIF p_Criterio = 1 THEN /*mas ventas*/
-        SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.Imagen, COUNT(UsuarioCurso.CursoID) AS Ventas
+        JOIN Categoria ON Curso.CategoriaID = Categoria.CategoriaID
+        WHERE Curso.BorradoLogico = FALSE
+        ORDER BY Curso.Calificacion DESC
+        LIMIT p_Limit;
+    ELSEIF p_Criterio = 1 THEN /* más ventas */
+        SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre, COUNT(UsuarioCurso.CursoID) AS Ventas
         FROM Curso
         JOIN UsuarioCurso ON Curso.CursoID = UsuarioCurso.CursoID
         JOIN Usuario ON UsuarioCurso.UsuarioID = Usuario.UsuarioID
+        JOIN Categoria ON Curso.CategoriaID = Categoria.CategoriaID
         WHERE Curso.BorradoLogico = FALSE
         AND Usuario.BorradoLogico = FALSE
-        GROUP BY Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.Imagen
+        GROUP BY Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico, Categoria.Nombre
         HAVING Ventas > 0
-        ORDER BY Ventas DESC;
-    ELSEIF p_Criterio = 2 THEN /*mas recientes*/
-        SELECT CursoID, Nombre, CostoGeneral, Descripcion, Calificacion, CategoriaID, Imagen
+        ORDER BY Ventas DESC
+        LIMIT p_Limit;
+    ELSEIF p_Criterio = 2 THEN /* más recientes */
+        SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre
         FROM Curso
-        WHERE BorradoLogico = FALSE
-        ORDER BY FechaCreacion DESC;
+        JOIN Categoria ON Curso.CategoriaID = Categoria.CategoriaID
+        WHERE Curso.BorradoLogico = FALSE
+        ORDER BY Curso.FechaCreacion DESC
+        LIMIT p_Limit;
     ELSE
         SELECT 'Criterio no válido' AS Mensaje;
     END IF;
 END$$
 
-DELIMITER $$
+DELIMITER ;
 
+
+DELIMITER $$
 CREATE PROCEDURE ObtenerCategorias()
 BEGIN
     SELECT CategoriaID, Nombre, Descripcion, CreadorID, FechaCreacion, BorradoLogico, FechaEliminacion

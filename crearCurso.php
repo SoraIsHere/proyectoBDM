@@ -11,12 +11,33 @@
 
 <?php include("header.php") ?>
 
+<?php
+
+include('conectarBD.php');
+include 'modelos/Categorias.php';
+$database = new db();
+$conexion = $database->conectarBD();
+$sql = "CALL ObtenerCategorias()";
+$result = mysqli_query($conexion, $sql);
+if (!$result) {
+    die('Error: ' . mysqli_error($conexion));
+}
+$categorias = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $categoria = new Categoria($row['CategoriaID'], $row['Nombre'], $row['Descripcion'], $row['CreadorID'], $row['FechaCreacion'], $row['BorradoLogico'], $row['FechaEliminacion']);
+    $categorias[] = $categoria;
+}
+mysqli_close($conexion);
+
+?>
+
 <body>
     <section>
         <div class="container">
             <div class="contenedor-formulario">
                 <h1>Crear Curso</h1>
-                <form id="formulario-curso" action="/controladores/CrearCurso.php" method="POST" enctype="multipart/form-data">
+                <form id="formulario-curso" action="/controladores/CrearCurso.php" method="POST"
+                    enctype="multipart/form-data">
                     <label for="nombre-curso">Nombre del Curso:</label>
                     <input type="text" id="nombre-curso" name="nombre" required>
 
@@ -29,9 +50,13 @@
                     <input type="file" id="profileImage" name="imagen" accept="image/*" required>
                     <label for="categoria">Categoria:</label>
                     <select name="categoria" required>
-                        <option value="1">Web</option>
+                        <?php foreach ($categorias as $categoria): ?>
+                            <option value="<?php echo $categoria->categoriaID; ?>">
+                                <?php echo htmlspecialchars($categoria->nombre); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
-                    
+
                     <div id="contenedor-capitulos">
                         <h2>Capítulos</h2>
                         <div class="capitulo" id="capitulo-1">

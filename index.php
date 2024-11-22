@@ -25,6 +25,9 @@ mysqli_close($conexion);
 
 ?>
 
+<?php include("controladores/CursosValorados.php");
+?>
+
 <body>
     <header class="hero">
         <div class="hero-content">
@@ -56,36 +59,22 @@ mysqli_close($conexion);
                     </form>
                 </div>
                 <div class="card-grid">
-                    <div class="card">
-                        <img src="media/curso1.png" alt="Curso 1">
-                        <h3>Curso de Desarrollo Web</h3>
-                        <p>Aprende a crear sitios web profesionales y creativos desde cero.</p>
-                        <a href="/detalleCurso.php" class="course-link fw-bold text-white">Ver más</a>
-                        <div class="mt-3">
-                            <a href="#" class="">Inteligencia Artificial</a>,
-                            <a href="#" class="">Programacion</a>
+                    <?php
+                    foreach ($cursosInicio as $curso) {
+                        ?>
+                        <div class="card">
+                            <img src="media/curso1.png" alt="Curso 1">
+                            <h3><?php echo $curso->nombre ?></h3>
+                            <p><?php echo $curso->descripcion ?></p>
+                            <a href="/detalleCurso.php?id=<?php echo $curso->cursoID ?>"
+                                class="course-link fw-bold text-white">Ver más</a>
+                            <div class="mt-3">
+                                <a <?php echo !$curso->categoriaBorrada ? "href=/search?cat=".$curso->categoriaID : "" ?>><?php echo !$curso->categoriaBorrada ? $curso->categoriaNombre : "Sin categoria" ?></a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <img src="media/curso2.png" alt="Curso 2">
-                        <h3>Curso de Marketing Digital</h3>
-                        <p>Domina el idioma de tu preferencia y expande tu oportunidad laboral.</p>
-                        <a href="/detalleCurso.php" class="course-link fw-bold text-white">Ver más</a>
-                        <div class="mt-3">
-                            <a href="#" class="">Inteligencia Artificial</a>,
-                            <a href="#" class="">Programacion</a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <img src="media/curso3.png" alt="Curso 3">
-                        <h3>Curso de Desarrollo de Apps moviles</h3>
-                        <p>Crea applicaciones útiles con herramientas profesionales.</p>
-                        <a href="/detalleCurso.php" class="course-link fw-bold text-white">Ver más</a>
-                        <div class="mt-3">
-                            <a href="#" class="">Inteligencia Artificial</a>,
-                            <a href="#" class="">Programacion</a>
-                        </div>
-                    </div>
+                        <?php
+                    }
+                    ?>
                     <!-- Más cursos -->
                 </div>
                 <div class="text-center d-flex justify-content-center">
