@@ -7,8 +7,8 @@
     <title>WebLearning</title>
 </head>
 <?php
-include('conectarBD.php');
 include 'modelos/Categorias.php';
+include('conectarBD.php');
 $database = new db();
 $conexion = $database->conectarBD();
 $sql = "CALL ObtenerCategorias()";

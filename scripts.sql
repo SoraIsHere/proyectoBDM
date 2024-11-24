@@ -572,3 +572,16 @@ BEGIN
     FROM Categoria
     WHERE CategoriaID = p_idCat;
 END$$
+
+DELIMITER $$
+CREATE PROCEDURE ObtenerCurso(
+    IN p_CursoID INT
+)
+BEGIN
+    SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre
+    FROM Curso
+    JOIN Categoria ON Curso.CategoriaID = Categoria.CategoriaID
+    WHERE Curso.CursoID = p_CursoID
+      AND Curso.BorradoLogico = FALSE;
+END$$
+
