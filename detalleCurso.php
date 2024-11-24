@@ -51,56 +51,77 @@ include("controladores/ObtenerCurso.php"); ?>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><a href="#html-css">Fundamentos de HTML y CSS</a></td>
-                                <td>✔️</td>
-                                <td>✔️</td>
-                            </tr>
-                            <tr>
                                 <td><a href="#javascript-react">JavaScript y React</a></td>
-                                <td>✔️</td>
-                                <td>✔️</td>
+                                <td>
+                                    <?php if ($usuarioLoggeado) { ?>
+                                        <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>✔️ <?php }
+                                    } ?>
+                                </td>
+                                <td>
+                                    <?php if ($usuarioLoggeado) { ?>
+                                        <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>✔️ <?php }
+                                    } ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td><a href="#wordpress">Integración con WordPress</a></td>
-                                <td>❌</td>
-                                <td><a href="#" class="transparent-btn" data-bs-toggle="modal"
-                                        data-bs-target="#purchaseModal">Comprar 5$</a></td>
+
+
+                                <td>
+                                    <?php if ($usuarioLoggeado) { ?>
+                                        <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>❌ <?php }
+                                    } ?>
+                                </td>
+                                <td>
+                                    <?php if ($usuarioLoggeado) { ?>
+                                        <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?> <a href="#"
+                                                class="transparent-btn" data-bs-toggle="modal"
+                                                data-bs-target="#purchaseModal">Comprar 5$</a>
+                                        <?php }
+                                    } ?>
+                                </td>
+
                             </tr>
                         </tbody>
                     </table>
                     <div style="width: 100%; text-align:center">
                         <?php if ($usuarioLoggeado) { ?>
-                            <a type="button" href="#" class="mt-4 transparent-btn" style="display:block"
-                                data-bs-toggle="modal" data-bs-target="#purchaseModal">Comprar todo el curso 25$</a>
-                            <a type="button" href="/diploma.php" class="mt-4 color-btn" style="display:block">Curso
-                                completado!</a>
-                        <?php } ?>
+
+                            <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>
+                                <a type="button" href="#" class="mt-4 transparent-btn" style="display:block"
+                                    data-bs-toggle="modal" data-bs-target="#purchaseModal">Comprar todo el curso 25$</a>
+                                <a type="button" href="/diploma.php" class="mt-4 color-btn" style="display:block">Curso
+                                    completado!</a>
+
+                            <?php }
+                        } ?>
                     </div>
                 </div>
 
                 <div class="texto mt-5">
                     <h2>Comentarios</h2>
-                    <?php if ($usuarioLoggeado) { ?>
-                        <form id="commentForm" class="mb-4">
-                            <div class="mb-3 mt-4">
-                                <label for="rating" class="form-label">Calificación</label>
+                    <?php if ($usuarioLoggeado) {
+                        if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>
+                            <form id="commentForm" class="mb-4">
+                                <div class="mb-3 mt-4">
+                                    <label for="rating" class="form-label">Calificación</label>
 
-                                <select id="rating" name="rating" required>
-                                    <option disabled selected value="">Selecciona una calificación</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="commentContent" class="form-label">Comentario</label>
-                                <textarea class="form-control" id="commentContent" rows="3" required></textarea>
-                            </div>
-                            <button type="submit" class="btn color-btn">Agregar Comentario</button>
-                        </form>
-                    <?php } ?>
+                                    <select id="rating" name="rating" required>
+                                        <option disabled selected value="">Selecciona una calificación</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="commentContent" class="form-label">Comentario</label>
+                                    <textarea class="form-control" id="commentContent" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn color-btn">Agregar Comentario</button>
+                            </form>
+                        <?php } ?> <?php } ?>
                     <div id="comentarios">
                         <div class="card mb-3">
                             <div class="card-body">

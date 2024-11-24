@@ -58,6 +58,7 @@ mysqli_close($conexion);
                             type="submit" class="transparent-btn">Buscar</button>
                     </form>
                 </div>
+                <h3 class="mb-4">Mejor valorados</h3>
                 <div class="card-grid">
                     <?php
                     foreach ($cursosInicio as $curso) {
@@ -65,11 +66,12 @@ mysqli_close($conexion);
                         <div class="card">
                             <img src="media/curso1.png" alt="Curso 1">
                             <h3><?php echo $curso->nombre ?></h3>
+                            <p class="text-green fw-bold">Calificacion: <?php echo $curso->calificacion ?>/5</p>
                             <p><?php echo $curso->descripcion ?></p>
                             <a href="/detalleCurso.php?id=<?php echo $curso->cursoID ?>"
                                 class="course-link fw-bold text-white">Ver más</a>
                             <div class="mt-3">
-                                <a <?php echo !$curso->categoriaBorrada ? "href=/search?cat=".$curso->categoriaID : "" ?>><?php echo !$curso->categoriaBorrada ? $curso->categoriaNombre : "Sin categoria" ?></a>
+                                <a <?php echo !$curso->categoriaBorrada ? "href=/search?cat=" . $curso->categoriaID : "" ?>><?php echo !$curso->categoriaBorrada ? $curso->categoriaNombre : "Sin categoria" ?></a>
                             </div>
                         </div>
                         <?php
