@@ -50,38 +50,32 @@ include("controladores/ObtenerCurso.php"); ?>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><a href="#javascript-react">JavaScript y React</a></td>
-                                <td>
-                                    <?php if ($usuarioLoggeado) { ?>
-                                        <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>✔️ <?php }
-                                    } ?>
-                                </td>
-                                <td>
-                                    <?php if ($usuarioLoggeado) { ?>
-                                        <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>✔️ <?php }
-                                    } ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="#wordpress">Integración con WordPress</a></td>
+                            <?php foreach ($lecciones as $leccion): ?>
+                                <tr>
+                                    <td style="width: 33%;"><a href="#javascript-react">
+                                            <?php echo $leccion->nombre ?></a></td>
+                                    <td style="width: 33%;">
+                                        <?php if ($usuarioLoggeado) { ?>
+                                            <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>✔️ ❌ <?php }
+                                        } ?>
+                                    </td>
+                                    <td style="width: 33%;">
+                                        <?php if ($usuarioLoggeado) { ?>
+                                            <?php if ($leccion->costo > 0) { ?>
+                                                <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?> <a href="#"
+                                                        class="transparent-btn" data-bs-toggle="modal"
+                                                        data-bs-target="#purchaseModal">Comprar <?php echo $leccion->costo ?>$</a>
+                                                <?php }
+                                            } else { ?>
 
+                                            <?php }
+                                        } ?>
+                                        <a href="/curso.php?id=<?php echo $leccion->cursoID ?>&nivel=<?php echo $leccion->leccionID ?>"
+                                            class="transparent-btn">Ver Leccion</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
 
-                                <td>
-                                    <?php if ($usuarioLoggeado) { ?>
-                                        <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>❌ <?php }
-                                    } ?>
-                                </td>
-                                <td>
-                                    <?php if ($usuarioLoggeado) { ?>
-                                        <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?> <a href="#"
-                                                class="transparent-btn" data-bs-toggle="modal"
-                                                data-bs-target="#purchaseModal">Comprar 5$</a>
-                                        <?php }
-                                    } ?>
-                                </td>
-
-                            </tr>
                         </tbody>
                     </table>
                     <div style="width: 100%; text-align:center">

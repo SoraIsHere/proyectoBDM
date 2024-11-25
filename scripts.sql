@@ -585,3 +585,13 @@ BEGIN
       AND Curso.BorradoLogico = FALSE;
 END$$
 
+DELIMITER $$
+CREATE PROCEDURE ObtenerLeccionesPorCurso(
+    IN p_CursoID INT
+)
+BEGIN
+    SELECT Leccion.LeccionID, Leccion.Nombre, Leccion.Costo, Leccion.Orden, Leccion.Descripcion, Leccion.Video, Leccion.CursoID, Leccion.BorradoLogico, Leccion.FechaEliminacion
+    FROM Leccion
+    WHERE Leccion.CursoID = p_CursoID
+      AND Leccion.BorradoLogico = FALSE;
+END$$
