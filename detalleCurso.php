@@ -64,14 +64,63 @@ include("controladores/ObtenerCurso.php"); ?>
                                             <?php if ($leccion->costo > 0) { ?>
                                                 <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?> <a href="#"
                                                         class="transparent-btn" data-bs-toggle="modal"
-                                                        data-bs-target="#purchaseModal">Comprar <?php echo $leccion->costo ?>$</a>
+                                                        data-bs-target="#purchaseModal-<?php echo $leccion->leccionID ?>">Comprar
+                                                        <?php echo $leccion->costo ?>$</a>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="purchaseModal-<?php echo $leccion->leccionID ?>"
+                                                        tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="purchaseModalLabel">Comprar Curso</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form class="purchaseForm" method="post"
+                                                                        action="/controladores/cursoUsuario.php">
+                                                                        <div class="mb-3">
+                                                                            <label for="paymentMethod" class="form-label">Método de
+                                                                                Pago</label>
+                                                                            <select class="form-select" name="paymentMethod"
+                                                                                id="paymentMethod" required>
+                                                                                <option value="">Selecciona una opción</option>
+                                                                                <option value="tarjeta">Tarjeta</option>
+                                                                                <option value="paypal">PayPal</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label for="purchaseDetails" class="form-label">Datos de
+                                                                                Compra</label>
+                                                                            <input type="text" name="purchaseDetails"
+                                                                                class="form-control" id="purchaseDetails"
+                                                                                placeholder="Ej. Número de tarjeta, correo de PayPal"
+                                                                                required>
+                                                                            <input type="hidden" name="leccionID"
+                                                                                value="<?php echo $leccion->leccionID ?>">
+                                                                            <input type="hidden" name="cursoID"
+                                                                                value="<?php echo $leccion->cursoID ?>">
+                                                                            <input type="hidden" name="completo" value="false">
+                                                                            <input type="hidden" name="userID"
+                                                                                value="<?php echo $usuarioID = $usuarioLoggeado->usuarioID; ?>">
+                                                                        </div>
+                                                                        <button type="submit" class="btn color-btn">
+                                                                            Comprar $<?php echo $leccion->costo ?>
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 <?php }
                                             } else { ?>
-
-                                            <?php }
-                                        } ?>
-                                        <a href="/curso.php?id=<?php echo $leccion->cursoID ?>&nivel=<?php echo $leccion->leccionID ?>"
-                                            class="transparent-btn">Ver Leccion</a>
+                                                <a href="/curso.php?id=<?php echo $leccion->cursoID ?>&nivel=<?php echo $leccion->leccionID ?>"
+                                                    class="transparent-btn">Ver Leccion</a>
+                                            <?php } ?>
+                                            <a href="/curso.php?id=<?php echo $leccion->cursoID ?>&nivel=<?php echo $leccion->leccionID ?>"
+                                                class="transparent-btn">Ver Leccion</a>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -83,10 +132,54 @@ include("controladores/ObtenerCurso.php"); ?>
 
                             <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>
                                 <a type="button" href="#" class="mt-4 transparent-btn" style="display:block"
-                                    data-bs-toggle="modal" data-bs-target="#purchaseModal">Comprar todo el curso 25$</a>
-                                <a type="button" href="/diploma.php" class="mt-4 color-btn" style="display:block">Curso
-                                    completado!</a>
+                                    data-bs-toggle="modal" data-bs-target="#purchaseModal-full">Comprar todo el curso <?php echo $curso->costoGeneral ?>$</a>
+                                <!-- Modal -->
+                                <div class="modal fade" id="purchaseModal-full" tabindex="-1"
+                                    aria-labelledby="purchaseModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="purchaseModalLabel">Comprar Curso</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form class="purchaseForm" method="post"
+                                                    action="/controladores/cursoUsuario.php">
+                                                    <div class="mb-3">
+                                                        <label for="paymentMethod" class="form-label">Método de
+                                                            Pago</label>
+                                                        <select class="form-select" name="paymentMethod" id="paymentMethod"
+                                                            required>
+                                                            <option value="">Selecciona una opción</option>
+                                                            <option value="tarjeta">Tarjeta</option>
+                                                            <option value="paypal">PayPal</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="purchaseDetails" class="form-label">Datos de
+                                                            Compra</label>
+                                                        <input type="text" name="purchaseDetails" class="form-control"
+                                                            id="purchaseDetails"
+                                                            placeholder="Ej. Número de tarjeta, correo de PayPal" required>
+                                                        <input type="hidden" name="cursoID" value="<?php echo $cursoID ?>">
+                                                        <input type="hidden" name="completo" value="true">
+                                                        <input type="hidden" name="userID"
+                                                            value="<?php echo $usuarioID = $usuarioLoggeado->usuarioID; ?>">
 
+                                                    </div>
+                                                    <button type="submit" class="btn color-btn">Comprar
+                                                        $<?php echo $curso->costoGeneral ?>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <a type="button" href="/diploma.php?id=<?php echo $cursoID ?>" data-curso="<?php $cursoID ?>"
+                                    class="mt-4 color-btn" style="display:block">Curso
+                                    completado!</a>
                             <?php }
                         } ?>
                     </div>
@@ -148,46 +241,20 @@ include("controladores/ObtenerCurso.php"); ?>
     </main>
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="purchaseModalLabel">Comprar Curso</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="purchaseForm">
-                        <div class="mb-3">
-                            <label for="paymentMethod" class="form-label">Método de Pago</label>
-                            <select class="form-select" id="paymentMethod" required>
-                                <option value="">Selecciona una opción</option>
-                                <option value="tarjeta">Tarjeta</option>
-                                <option value="paypal">PayPal</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="purchaseDetails" class="form-label">Datos de Compra</label>
-                            <input type="text" class="form-control" id="purchaseDetails"
-                                placeholder="Ej. Número de tarjeta, correo de PayPal" required>
-                        </div>
-                        <button type="submit" class="btn color-btn">Comprar 5$</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </body>
 
-
 <script>
-    document.getElementById('purchaseForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        alert('Compra completada');
-        window.location.href = '/curso.php';
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const forms = document.querySelectorAll('.purchaseForm');
+
+        forms.forEach(form => {
+            form.addEventListener('submit', function (event) {
+                alert('Compra completada');
+            });
+        });
     });
 </script>
+
 <?php include("footer.php") ?>
 
 </html>

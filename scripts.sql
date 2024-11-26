@@ -191,7 +191,7 @@ END$$
 
 DELIMITER $$
 
-CREATE PROCEDURE InsertarUsuarioCurso(
+create  PROCEDURE InsertarUsuarioCurso(
     IN p_UsuarioID INT,
     IN p_CursoID INT,
     IN p_Terminado BOOLEAN,
@@ -199,7 +199,7 @@ CREATE PROCEDURE InsertarUsuarioCurso(
 )
 BEGIN
     INSERT INTO UsuarioCurso (UsuarioID, CursoID, Terminado, FechaFinalizacion, FechaInscripcion, FormaPago)
-    VALUES (p_UsuarioID, p_CursoID, p_Terminado, p_FechaFinalizacion, CURRENT_DATE, p_FormaPago);
+    VALUES (p_UsuarioID, p_CursoID, p_Terminado, null, CURRENT_DATE, p_FormaPago);
 END$$
 
 DELIMITER $$
