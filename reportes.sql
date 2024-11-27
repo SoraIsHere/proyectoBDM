@@ -43,6 +43,7 @@ END //
 DELIMITER $$
 
 CREATE PROCEDURE ReporteVentasCursos(
+    IN p_UsuarioID INT,
     IN p_FechaInicio DATE,
     IN p_FechaFin DATE,
     IN p_CategoriaID INT,
@@ -53,9 +54,8 @@ BEGIN
         C.CursoID,
         C.Nombre AS NombreCurso,
         COUNT(DISTINCT UC.UsuarioID) AS CantidadAlumnosInscritos,
-        AVG(L.Orden) AS NivelPromedio,
-        SUM(C.CostoGeneral) AS TotalIngresos,
-        UC.FormaPago
+        AVG(NivelesCompletados.MaxNivel) AS NivelPromedio,
+        SUM(L.Costo) AS TotalIngresos
     FROM 
         Curso C
     JOIN 
@@ -65,53 +65,90 @@ BEGIN
     JOIN 
         Categoria CAT ON C.CategoriaID = CAT.CategoriaID
     JOIN 
-        UsuarioLeccion UL ON UC.UsuarioID = UL.UsuarioID
+        Leccion L ON L.CursoID = C.CursoID
     JOIN 
-        Leccion L ON UL.LeccionID = L.LeccionID
+        UsuarioLeccion UL ON UL.LeccionID = L.LeccionID AND UL.UsuarioID = UC.UsuarioID
+    LEFT JOIN (
+        SELECT 
+            UL.UsuarioID,
+            L.CursoID,
+            MAX(L.Orden) AS MaxNivel
+        FROM 
+            UsuarioLeccion UL
+        JOIN 
+            Leccion L ON UL.LeccionID = L.LeccionID
+        GROUP BY 
+            UL.UsuarioID, L.CursoID
+    ) AS NivelesCompletados ON UC.UsuarioID = NivelesCompletados.UsuarioID AND C.CursoID = NivelesCompletados.CursoID
     WHERE 
-        (C.FechaCreacion BETWEEN COALESCE(p_FechaInicio, '1970-01-01') AND COALESCE(p_FechaFin, '9999-12-31'))
+        C.CreadorID = p_UsuarioID
+        AND (UC.FechaInscripcion BETWEEN COALESCE(p_FechaInicio, '1970-01-01') AND COALESCE(p_FechaFin, '9999-12-31'))
         AND (C.CategoriaID = p_CategoriaID OR p_CategoriaID IS NULL)
         AND (C.BorradoLogico = FALSE OR p_Activo IS NULL)
+        AND (p_Activo IS NULL OR (UC.Terminado = FALSE))
     GROUP BY 
-        C.CursoID, C.Nombre, UC.FormaPago;
+        C.CursoID, C.Nombre;
 END$$
 
-DELIMITER ;
 DELIMITER $$
 
-CREATE PROCEDURE ReporteDetallesCurso(
-    IN p_CursoID INT,
+CREATE PROCEDURE TotalVentasPorMetodoPago(
+    IN p_UsuarioID INT,
     IN p_FechaInicio DATE,
-    IN p_FechaFin DATE
+    IN p_FechaFin DATE,
+    IN p_CategoriaID INT,
+    IN p_Activo BOOLEAN
 )
 BEGIN
     SELECT 
-        C.CursoID,
-        C.Nombre AS NombreCurso,
-        U.UsuarioID,
-        U.Nombre AS NombreAlumno,
-        UC.FechaInscripcion,
-        MAX(L.Orden) AS NivelAvance,  -- Obtener el orden más grande como nivel de avance
-        C.CostoGeneral AS PrecioPagado,
-        UC.FormaPago
+        UC.FormaPago,
+        SUM(L.Costo) AS TotalIngresos
     FROM 
         Curso C
     JOIN 
         UsuarioCurso UC ON C.CursoID = UC.CursoID
     JOIN 
+        Leccion L ON L.CursoID = C.CursoID
+    JOIN 
+        UsuarioLeccion UL ON UL.LeccionID = L.LeccionID AND UL.UsuarioID = UC.UsuarioID
+    WHERE 
+        C.CreadorID = p_UsuarioID
+        AND (UC.FechaInscripcion BETWEEN COALESCE(p_FechaInicio, '1970-01-01') AND COALESCE(p_FechaFin, '9999-12-31'))
+        AND (C.CategoriaID = p_CategoriaID OR p_CategoriaID IS NULL)
+        AND (C.BorradoLogico = FALSE OR p_Activo IS NULL)
+        AND (p_Activo IS NULL OR (UC.Terminado = FALSE))
+    GROUP BY 
+        UC.FormaPago;
+END$$
+
+
+DELIMITER $$
+
+CREATE PROCEDURE DetalleVentasCurso(
+    IN p_CursoID INT
+)
+BEGIN
+    SELECT 
+        U.Nombre AS NombreAlumno,
+        UC.FechaInscripcion,
+        MAX(L.Orden) AS NivelAvance,
+        SUM(L.Costo) AS PrecioPagado,
+        UC.FormaPago
+    FROM 
+        UsuarioCurso UC
+    JOIN 
         Usuario U ON UC.UsuarioID = U.UsuarioID
     JOIN 
-        UsuarioLeccion UL ON UC.UsuarioID = UL.UsuarioID
+        UsuarioLeccion UL ON UL.UsuarioID = UC.UsuarioID
     JOIN 
         Leccion L ON UL.LeccionID = L.LeccionID
     WHERE 
-        C.CursoID = p_CursoID
-        AND (UC.FechaInscripcion BETWEEN COALESCE(p_FechaInicio, '1970-01-01') AND COALESCE(p_FechaFin, '9999-12-31'))
+        UC.CursoID = p_CursoID
+        AND L.CursoID = p_CursoID
     GROUP BY 
-        C.CursoID, C.Nombre, U.UsuarioID, U.Nombre, UC.FechaInscripcion, UC.FormaPago
-    ORDER BY 
-        U.Nombre;
+        U.UsuarioID, UC.FechaInscripcion, UC.FormaPago;
 END$$
+
 
 DELIMITER $$
 CREATE PROCEDURE BuscarCursos(
