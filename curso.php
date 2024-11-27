@@ -49,42 +49,83 @@ $leccion = isset($_GET['nivel']) ? intval($_GET['nivel']) : false;
             <a href="/detalleCurso.php?id=<?php echo $curso->cursoID ?>" class="mb-4 d-block">volver</a>
             <h2>Temas del Curso</h2>
             <ul class="lista-temas">
-                <?php foreach ($lecciones as $leccion): ?>
-                    <li>
-                        <a href="#tema-<?php echo $leccion->leccionID ?>" class="leccion-link">
-                            <?php echo $leccion->nombre ?> <span class="completado">✔️</span>
-                        </a>
-                    </li>
-                <?php endforeach ?>
+                <?php $count = 1;
+                foreach ($lecciones as $leccion): ?>
+                    <?php
+                    $leccionComprada = false;
+                    $leccionCompletada = false;
+                    foreach ($leccionesUsuario as $leccionU) {
+                        if ($leccionU['LeccionID'] == $leccion->leccionID) {
+                            $leccionComprada = true;
+                            if ($leccionU['Leido']) {
+                                $leccionCompletada = true;
+                            }
+                            break;
+                        }
+                    }
+                    ?>
+                    <?php if ($leccionComprada) { ?>
+                        <li>
+                            <a href="#tema-<?php echo $leccion->leccionID ?>" class="leccion-link">
+                                <?php echo $count . " - " . $leccion->nombre ?> <span
+                                    class="completado"><?php echo $leccionCompletada ? "✔️" : "" ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <?php $count++; endforeach ?>
             </ul>
         </aside>
         <main class="contenido-tema">
             <?php $count = 1;
             $max = count($lecciones);
-            foreach ($lecciones as $leccion): ?>
-                <section class="tema-container <?php echo $count == 1 ? "active" : "" ?>"
-                    id="tema-<?php echo $leccion->leccionID ?>">
-                    <h2><?php echo $leccion->nombre ?></h2>
-                    <p><?php echo $leccion->descripcion ?></p>
-                    <h3 class="mt-4">Video</h3>
-                    <div class="videos"> <?php if (!empty($leccion->video)): ?> <video controls>
-                                <source src="data:video/mp4;base64,<?php echo base64_encode($leccion->video); ?>"
-                                    type="video/mp4"> Tu navegador no soporta el elemento de video.
-                            </video> <?php else: ?>
-                            <p>No hay video disponible para esta lección.</p> <?php endif; ?>
-                    </div>
-                    <div class="" style="width:100%; text-align:right">
-                        <?php if ($count != $max) { ?>
-                            <a class="color-btn leccion-link d-flex mt-4 float-end"
-                                href="#tema-<?php echo $lecciones[$count]->leccionID ?>">Terminar Leccion
-                            </a>
-                        <?php } else { ?>
-                            <a class="color-btn d-flex mt-4 float-end" href="diploma.php?id=<?php echo $cursoID ?>">Terminar Curso
-                            </a>
-                        <?php } ?>
-                    </div>
-                </section>
-                <?php $count++; endforeach ?>
+            $nivel = "";
+
+            foreach ($lecciones as $leccion):
+                $elegido = "";
+                if (isset($_GET['nivel'])) {
+                    $nivel = intval($_GET['nivel']);
+                } else if ($count == 1) {
+                    $elegido = "active";
+                }
+                if ($nivel == $leccion->leccionID) {
+                    $elegido = "active";
+                }
+
+                $leccionComprada = false;
+                $leccionCompletada = false;
+                foreach ($leccionesUsuario as $leccionU) {
+                    if ($leccionU['LeccionID'] == $leccion->leccionID) {
+                        $leccionComprada = true;
+                        if ($leccionU['Leido']) {
+                            $leccionCompletada = true;
+                        }
+                        break;
+                    }
+                }
+                if ($leccionComprada) {
+                    ?>
+                    <section class="tema-container <?php echo $elegido ?>" id="tema-<?php echo $leccion->leccionID ?>">
+                        <h2><?php echo $leccion->nombre ?></h2>
+                        <p><?php echo $leccion->descripcion ?></p>
+                        <h3 class="mt-4">Video</h3>
+                        <div class="videos"> <?php if (!empty($leccion->video)): ?> <video controls>
+                                    <source src="data:video/mp4;base64,<?php echo base64_encode($leccion->video); ?>"
+                                        type="video/mp4"> Tu navegador no soporta el elemento de video.
+                                </video> <?php else: ?>
+                                <p>No hay video disponible para esta lección.</p> <?php endif; ?>
+                        </div>
+                        <div class="" style="width:100%; text-align:right">
+                            <?php if (!$leccionCompletada) { ?>
+                                <a class="color-btn d-flex mt-4 float-end"
+                                    href="/controladores/completarLeccion.php?leccion=<?php echo $leccion->leccionID ?>&curso=<?php echo $leccion->cursoID ?>">Terminar
+                                    Leccion
+                                </a>
+                            <?php } ?>
+                        </div>
+                    </section>
+                <?php }
+                $count++;
+            endforeach ?>
         </main>
     </div>
 </body>

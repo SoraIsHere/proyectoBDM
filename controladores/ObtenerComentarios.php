@@ -1,12 +1,10 @@
 <?php
-include('/modelos/Comentario.php');
+include('modelos/Comentario.php');
 
 // Conectar a la base de datos
 $database = new db();
 $conexion = $database->conectarBD();
 
-// Obtener el cursoID de los parámetros del URL
-$cursoID = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($cursoID > 0) {
     // Llamar al procedimiento almacenado para obtener los comentarios del curso
@@ -21,11 +19,15 @@ if ($cursoID > 0) {
         $resultComentarios = $stmtSelectComentarios->get_result();
         while ($row = $resultComentarios->fetch_assoc()) {
             $comentarios[] = new Comentario(
+                $row['ComentarioID'],
                 $row['Texto'],
-                $row['UsuarioNombre'], // Asignando el nombre del usuario
+                $row['UsuarioID'],
                 $row['Calificacion'],
-                $cursoID,
-                $row['FechaCreacion']
+                $row['CursoID'],
+                $row['BorradoLogico'],
+                $row['FechaEliminacion'],
+                $row['FechaCreacion'],
+                $row['UsuarioNombre']
             );
         }
         $resultComentarios->free();
@@ -42,7 +44,7 @@ if ($cursoID > 0) {
 mysqli_close($conexion);
 
 // Echo del contenido del array comentarios para ver los resultados
-echo '<pre>';
+/* echo '<pre>';
 print_r($comentarios);
-echo '</pre>';
+echo '</pre>'; */
 ?>

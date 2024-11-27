@@ -77,6 +77,7 @@ CREATE TABLE Comentario (
     CursoID INT NOT NULL,
     BorradoLogico BOOLEAN DEFAULT FALSE NOT NULL,
     FechaEliminacion TIMESTAMP NULL DEFAULT NULL,
+    FechaCreacion TIMESTAMP NOT NULL,
     FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
     FOREIGN KEY (CursoID) REFERENCES Curso(CursoID)
 );
@@ -176,7 +177,6 @@ BEGIN
 END$$
 
 DELIMITER $$
-
 CREATE PROCEDURE InsertarComentario(
     IN p_Texto TEXT,
     IN p_UsuarioID INT,
@@ -184,11 +184,9 @@ CREATE PROCEDURE InsertarComentario(
     IN p_CursoID INT
 )
 BEGIN
-    INSERT INTO Comentario (Texto, UsuarioID, Calificacion, CursoID, BorradoLogico)
-    VALUES (p_Texto, p_UsuarioID, p_Calificacion, p_CursoID, FALSE);
+    INSERT INTO Comentario (Texto, UsuarioID, Calificacion, CursoID, BorradoLogico, FechaCreacion)
+    VALUES (p_Texto, p_UsuarioID, p_Calificacion, p_CursoID, FALSE, CURRENT_TIMESTAMP);
 END$$
-
-
 DELIMITER $$
 
 create  PROCEDURE InsertarUsuarioCurso(
@@ -602,10 +600,15 @@ CREATE PROCEDURE ObtenerComentariosPorCurso(
 )
 BEGIN
     SELECT 
+        C.ComentarioID,
         C.Texto,
+        C.UsuarioID,
+        U.Nombre AS UsuarioNombre,
         C.Calificacion,
-        C.FechaCreacion,
-        U.Nombre AS UsuarioNombre
+        C.CursoID,
+        C.BorradoLogico,
+        C.FechaEliminacion,
+        C.FechaCreacion
     FROM 
         Comentario C
         INNER JOIN Usuario U ON C.UsuarioID = U.UsuarioID
@@ -615,4 +618,33 @@ BEGIN
         C.FechaCreacion DESC;
 END$$
 
-DELIMITER ;
+DELIMITER $$
+
+CREATE PROCEDURE completarLeccion(
+    IN p_UsuarioID INT,
+    IN p_LeccionID INT
+)
+BEGIN
+    UPDATE UsuarioLeccion
+    SET 
+        Leido = TRUE
+    WHERE 
+        UsuarioID = p_UsuarioID 
+        AND LeccionID = p_LeccionID;
+END$$
+
+DELIMITER $$
+
+CREATE PROCEDURE completarCurso(
+    IN p_UsuarioID INT,
+    IN p_CursoID INT
+)
+BEGIN
+    UPDATE UsuarioCurso
+    SET 
+        Terminado = TRUE,
+        FechaFinalizacion = CURRENT_DATE
+    WHERE 
+        UsuarioID = p_UsuarioID 
+        AND CursoID = p_CursoID;
+END$$

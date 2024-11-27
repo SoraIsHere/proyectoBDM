@@ -1,5 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
+<?php session_start();
+include('conectarBD.php');
+include('modelos/Usuarios.php');
+include('modelos/Curso.php'); // Verifica si el usuario está loggeado 
+if (!isset($_SESSION['usuarioLoggeado'])) {
+    header("Location: /login.php?error=usuario_no_loggeado");
+    exit;
+}
+$usuarioLoggeado = unserialize($_SESSION['usuarioLoggeado']);
+$usuarioID = $usuarioLoggeado->usuarioID;
+$cursoID = isset($_GET['cursoId']) ? intval($_GET['cursoId']) : 0;
+if ($cursoID > 0) {
+    // Conectar a la base de datos 
+    $database = new db();
+    $conexion = $database->conectarBD();
+    // Verificar si el curso está completado por el usuario
+    $sqlVerificarCurso = "SELECT Terminado, FechaFinalizacion FROM UsuarioCurso WHERE UsuarioID = ? AND CursoID = ? AND Terminado = TRUE";
+    $stmtVerificarCurso = $conexion->prepare($sqlVerificarCurso);
+    $stmtVerificarCurso->bind_param('ii', $usuarioID, $cursoID);
+    $stmtVerificarCurso->execute();
+    $resultVerificarCurso = $stmtVerificarCurso->get_result();
+    $cursoCompletado = $resultVerificarCurso->fetch_assoc();
+    $stmtVerificarCurso->close();
+    if ($cursoCompletado) {
+        // Obtener los detalles del curso 
+        $sqlObtenerCurso = "CALL ObtenerCurso(?)";
+        $stmtObtenerCurso = $conexion->prepare($sqlObtenerCurso);
+        $stmtObtenerCurso->bind_param('i', $cursoID);
+        $stmtObtenerCurso->execute();
+        $resultObtenerCurso = $stmtObtenerCurso->get_result();
+        $curso = $resultObtenerCurso->fetch_assoc();
+        $stmtObtenerCurso->close();
+
+        //creador
+        $sqlObtenerCreador = "SELECT Nombre, Apellido FROM Usuario WHERE UsuarioID = ?";
+        $stmtObtenerCreador = $conexion->prepare($sqlObtenerCreador);
+        $stmtObtenerCreador->bind_param('i', $curso['CreadorID']);
+        $stmtObtenerCreador->execute();
+        $resultObtenerCreador = $stmtObtenerCreador->get_result();
+        $creador = $resultObtenerCreador->fetch_assoc();
+        $stmtObtenerCreador->close();
+    } else {
+        echo "Error: El usuario no ha completado el curso.";
+        exit;
+    }
+    // Cerrar la conexión 
+    mysqli_close($conexion);
+} else {
+    echo 'ID del curso no válido';
+    exit;
+} ?>
 
 <head>
     <meta charset="UTF-8">
@@ -83,22 +134,21 @@
 
 <body>
     <section>
-
         <div class="diploma" id="diploma">
             <h1>Diploma de Curso</h1>
             <p>Este diploma certifica que</p>
-            <p class="nombre">Juan Perez</p>
+            <p class="nombre"><?php echo htmlspecialchars($usuarioLoggeado->nombre. " ". $usuarioLoggeado->apellido); ?></p>
             <p>ha completado satisfactoriamente el curso de</p>
-            <p class="nombre">Desarrollo Web Completo</p>
+            <p class="nombre"><?php echo htmlspecialchars($curso['Nombre']); ?></p>
             <p>el día</p>
-            <p class="campos">18/09/2024</p>
+            <p class="campos"><?php echo htmlspecialchars($cursoCompletado['FechaFinalizacion']); ?></p>
             <p>Certificado por</p>
-            <p class="campos">Jose Castillo</p>
+            <p class="campos"><?php echo htmlspecialchars($creador['Nombre'] . " " . $creador['Apellido']); ?></p>
+            <!-- Este valor podría ser dinámico si es necesario -->
         </div>
-        <div style="text-align: center; margin-top: 20px">
-            <button class="btn-imprimir" onclick="guardarComoPDF()">Guardar</button>
-            <a class="btn-volver" href="/">Volver</a>
-        </div>
+        <div style="text-align: center; margin-top: 20px"> <button class="btn-imprimir"
+                onclick="guardarComoPDF()">Guardar</button> <a class="btn-volver"
+                href="/detalleCurso.php?id=<?php echo $cursoID; ?>">Volver</a> </div>
     </section>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>

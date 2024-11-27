@@ -204,7 +204,7 @@ include("controladores/ObtenerCurso.php"); ?>
                                     </div>
                                 </div>
                                 <?php if ($cursoTerminado) { ?>
-                                    <a type="button" href="/diploma.php?id=<?php echo $cursoID ?>" data-curso="<?php $cursoID ?>"
+                                    <a type="button" href="/diploma.php?cursoId=<?php echo $cursoID ?>" data-curso="<?php $cursoID ?>"
                                         class="mt-4 color-btn" style="display:block">Curso
                                         completado!</a>
                                 <?php } ?>
@@ -214,9 +214,19 @@ include("controladores/ObtenerCurso.php"); ?>
                 </div>
 
                 <div class="texto mt-5" id="comentarios">
-                    <h2>Comentarios</h2>
+
+                    <?php include("controladores/ObtenerComentarios.php"); ?>
+                    <h2 class="mb-4">Comentarios</h2>
                     <?php if ($usuarioLoggeado) {
-                        if ($usuarioLoggeado->tipoUsuario == "Estudiante" && $cursoComprado) { ?>
+                        $comentado = false;
+                        foreach ($comentarios as $item):
+                            if ($item->usuarioID == $usuarioID) {
+                                $comentado = true;
+                                break;
+                            }
+                        endforeach;
+
+                        if ($usuarioLoggeado->tipoUsuario == "Estudiante" && $cursoComprado && !$comentado) { ?>
                             <form id="commentForm" class="mb-4" method="post" action="/controladores/insertarComentario.php">
                                 <div class="mb-3 mt-4">
                                     <label for="rating" class="form-label">Calificación</label>
@@ -240,18 +250,32 @@ include("controladores/ObtenerCurso.php"); ?>
                             </form>
                         <?php } ?> <?php } ?>
                     <div id="comentarios">
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-2">
-                                    <img src="/media/curso2.png" alt="Juan Pérez" class="rounded-circle me-3" width="50"
-                                        height="50">
-                                    <h5 class="card-title mb-0">Juan Pérez</h5>
+                        <?php foreach ($comentarios as $comentario): ?>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-2"> <img src="/media/curso2.png"
+                                            alt="<?php echo htmlspecialchars($comentario->usuarioNombre); ?>"
+                                            class="rounded-circle me-3" width="50" height="50">
+                                        <h5 class="card-title mb-0">
+                                            <?php echo htmlspecialchars($comentario->usuarioNombre); ?>
+                                        </h5>
+                                    </div>
+                                    <h6 class="card-subtitle mb-2 text-muted">Calificación:
+                                        <?php echo htmlspecialchars($comentario->calificacion); ?>/5
+                                    </h6>
+                                    <p class="card-text"><?php echo htmlspecialchars($comentario->texto); ?></p>
+                                    <p class="card-text"><small class="text-muted">Fecha:
+                                            <?php echo htmlspecialchars($comentario->fechaCreacion); ?></small></p>
+                                    <?php ?>
+
+                                    <?php if ($usuarioLoggeado->tipoUsuario == "Administrador") { ?>
+                                        <a class="btn color-btn float-right"
+                                            href="/controladores/borrarComentario.php?comentario=<?php echo $comentario->comentarioID ?>">Borrar
+                                        </a>
+                                    <?php } ?>
                                 </div>
-                                <h6 class="card-subtitle mb-2 text-muted">Calificación: 4/5</h6>
-                                <p class="card-text">Muy buen curso</p>
-                                <p class="card-text"><small class="text-muted">Fecha: 20/09/2024</small></p>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
