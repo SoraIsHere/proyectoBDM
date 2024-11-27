@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE ObtenerKardex(
+create PROCEDURE ObtenerKardex(
     IN p_UsuarioID INT,
     IN p_FechaInicio DATE,
     IN p_FechaFin DATE,
@@ -15,6 +15,7 @@ BEGIN
         uc.FechaInscripcion,
         uc.FechaFinalizacion,
         uc.UltimaVisitaDeLeccion,
+        cat.Nombre as Categoria,
         CASE
             WHEN uc.Terminado = 1 THEN 'Terminado'
             ELSE 'Incompleto'
@@ -112,14 +113,11 @@ BEGIN
         U.Nombre;
 END$$
 
-DELIMITER ;
-
 DELIMITER $$
-
 CREATE PROCEDURE BuscarCursos(
     IN p_CategoriaID INT,
     IN p_TituloCurso VARCHAR(100),
-    IN p_CreadorID INT,
+    IN p_NombreCreador VARCHAR(100),
     IN p_FechaInicio DATE,
     IN p_FechaFin DATE
 )
@@ -131,6 +129,7 @@ BEGIN
         C.Descripcion,
         C.Calificacion,
         C.FechaCreacion,
+        C.Imagen,
         U.Nombre AS NombreCreador,
         CAT.Nombre AS Categoria
     FROM 
@@ -143,13 +142,13 @@ BEGIN
         C.BorradoLogico = FALSE
         AND (C.CategoriaID = p_CategoriaID OR p_CategoriaID IS NULL)
         AND (C.Nombre LIKE CONCAT('%', p_TituloCurso, '%') OR p_TituloCurso IS NULL)
-        AND (C.CreadorID = p_CreadorID OR p_CreadorID IS NULL)
+        AND (U.Nombre LIKE CONCAT('%', p_NombreCreador, '%') OR p_NombreCreador IS NULL)
         AND (C.FechaCreacion BETWEEN COALESCE(p_FechaInicio, '1970-01-01') AND COALESCE(p_FechaFin, '9999-12-31'))
     ORDER BY 
         C.FechaCreacion DESC;
 END$$
-DELIMITER $$
 
+DELIMITER $$
 CREATE PROCEDURE ReporteInstructores()
 BEGIN
     SELECT 

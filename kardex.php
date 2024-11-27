@@ -10,7 +10,57 @@
     <?php include("header.php") ?>
 </head>
 
+<?php
+include('conectarBD.php');
+include('modelos/Curso.php');
+include('modelos/Categorias.php');
 
+$database = new db();
+$conexion = $database->conectarBD();
+// Obtener categorías
+$sql = "CALL ObtenerCategorias()";
+$result = mysqli_query($conexion, $sql);
+if (!$result) {
+    die('Error: ' . mysqli_error($conexion));
+}
+$categorias = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $categoria = new Categoria($row['CategoriaID'], $row['Nombre'], $row['Descripcion'], $row['CreadorID'], $row['FechaCreacion'], $row['BorradoLogico'], $row['FechaEliminacion']);
+    $categorias[] = $categoria;
+}
+mysqli_free_result($result);
+mysqli_next_result($conexion);
+
+// Verifica si el usuario está loggeado 
+if (!isset($_SESSION['usuarioLoggeado'])) {
+    header("Location: login.php?error=usuario_no_loggeado");
+    exit;
+}
+
+$usuarioLoggeado = unserialize($_SESSION['usuarioLoggeado']);
+$usuarioID = $usuarioLoggeado->usuarioID;
+// Obtener los parámetros del formulario 
+
+$fechaInicio = isset($_GET['fecha-inicio']) && $_GET['fecha-inicio'] !== '' ? $_GET['fecha-inicio'] : null;
+$fechaFin = isset($_GET['fecha-fin']) && $_GET['fecha-fin'] !== '' ? $_GET['fecha-fin'] : null;
+$categoriaID = isset($_GET['categoria']) && $_GET['categoria'] !== '' && $_GET['categoria'] !== 'todas' ? intval($_GET['categoria']) : null;
+$estado = isset($_GET['estado']) && $_GET['estado'] !== '' ? $_GET['estado'] : 'todos';
+$soloTerminados = $estado === 'terminados' ? TRUE : FALSE;
+$soloActivos = $estado === 'activos' ? TRUE : FALSE;
+
+// Llamar al procedimiento almacenado para obtener el kardex 
+$sqlObtenerKardex = "CALL ObtenerKardex(?, ?, ?, ?, ?, ?)";
+$stmtObtenerKardex = $conexion->prepare($sqlObtenerKardex);
+$stmtObtenerKardex->bind_param('issiii', $usuarioID, $fechaInicio, $fechaFin, $categoriaID, $soloTerminados, $soloActivos);
+$stmtObtenerKardex->execute();
+$resultObtenerKardex = $stmtObtenerKardex->get_result();
+$cursos = [];
+while ($row = $resultObtenerKardex->fetch_assoc()) {
+    $cursos[] = $row;
+}
+$stmtObtenerKardex->close();
+mysqli_close($conexion);
+?>
 
 <body>
 
@@ -50,7 +100,8 @@
                         class="color-btn" onclick="return confirmarBorrado()">Borrar mi cuenta</a>
                     <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>
                         <a type="button" style="margin: 0px 5px" class="color-btn"
-                            href="/api/userInfo.php?usuarioID=<?php echo $usuarioLoggeado->usuarioID ?>" target="_blank">Bajar mi
+                            href="/api/userInfo.php?usuarioID=<?php echo $usuarioLoggeado->usuarioID ?>"
+                            target="_blank">Bajar mi
                             informacion</a>
 
                     <?php } ?>
@@ -108,7 +159,7 @@
             <section class="filtros">
                 <div class="container">
                     <h2>Filtros</h2>
-                    <form action="#">
+                    <form action="kardex.php#kardex" method="get">
                         <label for="fecha-inicio">Fecha de Inscripción (Inicio):</label>
                         <input type="date" id="fecha-inicio" name="fecha-inicio">
 
@@ -118,9 +169,11 @@
                         <label for="categoria">Categoría:</label>
                         <select id="categoria" name="categoria">
                             <option value="todas">Todas</option>
-                            <option value="it-software">IT & Software</option>
-                            <option value="marketing">Marketing</option>
-                            <option value="design">Design</option>
+                            <?php foreach ($categorias as $categoria): ?>
+                                <option value="<?php echo $categoria->categoriaID; ?>">
+                                    <?php echo htmlspecialchars($categoria->nombre); ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
 
                         <label for="estado">Estado del Curso:</label>
@@ -135,9 +188,9 @@
                 </div>
             </section>
 
-            <section class="kardex">
+            <section class="kardex" id="kardex">
                 <div class="container">
-                    <h2>Mis Cursos</h2>
+                    <h2 class="mb-5">Mis Cursos</h2>
                     <table>
                         <thead>
                             <tr>
@@ -147,29 +200,28 @@
                                 <th>Última Fecha de Ingreso</th>
                                 <th>Progreso</th>
                                 <th>Estado</th>
-                                <th>Fecha de finalizacion</th>
+                                <th>Fecha de finalización</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Curso de Programación</td>
-                                <td>IT & Software</td>
-                                <td>01/08/2024</td>
-                                <td>15/08/2024</td>
-                                <td>50%</td>
-                                <td>En Progreso</td>
-                                <td> - </td>
-                            </tr>
-                            <tr>
-                                <td>Marketing Digital</td>
-                                <td>Marketing</td>
-                                <td>10/07/2024</td>
-                                <td>22/07/2024</td>
-                                <td>100%</td>
-                                <td>Completado</td>
-                                <td>22/07/2024</td>
-                            </tr>
-                            <!-- Agrega más cursos según sea necesario -->
+                            <?php if (!empty($cursos)): ?>
+                                <?php foreach ($cursos as $curso): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($curso['NombreCurso']); ?></td>
+                                        <td><?php echo htmlspecialchars($curso['Categoria']); ?></td>
+                                        <td><?php echo htmlspecialchars($curso['FechaInscripcion']); ?></td>
+                                        <td><?php echo htmlspecialchars($curso['UltimaVisitaDeLeccion']); ?></td>
+                                        <td><?php echo htmlspecialchars($curso['ProgresoCurso']); ?></td>
+                                        <td><?php echo htmlspecialchars($curso['EstadoCurso']); ?></td>
+                                        <td><?php echo htmlspecialchars($curso['FechaFinalizacion'] ? $curso['FechaFinalizacion'] : '-'); ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7">No se encontraron resultados para los filtros aplicados.</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

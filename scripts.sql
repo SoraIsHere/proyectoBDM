@@ -442,7 +442,7 @@ DELIMITER ;
 /**Triggers**/
 DELIMITER $$
 
-CREATE TRIGGER ActualizarCalificacionCurso
+CREATE TRIGGER ActualizarCalificacionCursoInsert
 AFTER INSERT ON Comentario
 FOR EACH ROW
 BEGIN
@@ -460,24 +460,21 @@ BEGIN
 END$$
 
 DELIMITER $$
-
-CREATE TRIGGER ActualizarCalificacionCursoDespuesEliminar
+CREATE TRIGGER ActualizarCalificacionCursoUpdate
 AFTER UPDATE ON Comentario
 FOR EACH ROW
 BEGIN
     DECLARE promedio DECIMAL(5,2);
 
-    IF OLD.BorradoLogico = FALSE AND NEW.BorradoLogico = TRUE THEN
-        SELECT CEIL(AVG(Calificacion))
-        INTO promedio
-        FROM Comentario
-        WHERE CursoID = OLD.CursoID
-        AND BorradoLogico = FALSE;
+    SELECT CEIL(AVG(Calificacion))
+    INTO promedio
+    FROM Comentario
+    WHERE CursoID = OLD.CursoID
+    AND BorradoLogico = FALSE;
 
-        UPDATE Curso
-        SET Calificacion = promedio
-        WHERE CursoID = OLD.CursoID;
-    END IF;
+    UPDATE Curso
+    SET Calificacion = promedio
+    WHERE CursoID = OLD.CursoID;
 END$$
 
 DELIMITER $$

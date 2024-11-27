@@ -21,7 +21,9 @@ include("controladores/ObtenerCurso.php"); ?>
 <body>
     <main>
         <header class="curso-hero">
-            <img src="/media/curso1.png">
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($curso->imagen); ?>"
+                                            alt="<?php echo htmlspecialchars($curso->nombre); ?>"
+                                         style="max-height: 400px; width: 600px; object-fit: cover; object-position: top;">
             <div class="hero-content">
                 <h1 class="mt-4">
                     <?php echo $curso->nombre ?>
@@ -31,7 +33,7 @@ include("controladores/ObtenerCurso.php"); ?>
                 <p class="fw-bold text-white">Calificación <?php echo $curso->calificacion ?>/5</p>
                 <a href="#detalle-curso" class="color-btn">Mas detalles</a>
                 <div class="mt-3">
-                    <a href="/search?cat=<?php echo $curso->categoriaID; ?>"
+                    <a href="/busquedas.php?cat=<?php echo $curso->categoriaID; ?>"
                         class=""><?php echo $curso->categoriaNombre; ?></a>
                 </div>
             </div>
@@ -253,9 +255,7 @@ include("controladores/ObtenerCurso.php"); ?>
                         <?php foreach ($comentarios as $comentario): ?>
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <div class="d-flex align-items-center mb-2"> <img src="/media/curso2.png"
-                                            alt="<?php echo htmlspecialchars($comentario->usuarioNombre); ?>"
-                                            class="rounded-circle me-3" width="50" height="50">
+                                    <div class="d-flex align-items-center mb-2">
                                         <h5 class="card-title mb-0">
                                             <?php echo htmlspecialchars($comentario->usuarioNombre); ?>
                                         </h5>
