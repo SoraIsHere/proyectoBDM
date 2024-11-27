@@ -34,6 +34,7 @@ if (isset($_SESSION['usuarioLoggeado'])) {
 
         // Verificar si faltan valores
         if (($leccionID === null || $cursoID === "") && !$completo) {
+            header("Location: /detalleCurso.php?id={$cursoID}&error=valores_incompletos");
             echo "Redirigiendo a detalleCurso.php: Valores incompletos.";
             exit;
         }
@@ -136,8 +137,14 @@ if (isset($_SESSION['usuarioLoggeado'])) {
         }
 
         mysqli_close($conexion);
+        header("Location: /curso.php?id={$cursoID}");
+        exit;
+
     }
 } else {
     echo "Error: Usuario no loggeado.";
+    header("Location: /login.php?error=usuario_no_loggeado");
+    exit;
+
 }
 ?>

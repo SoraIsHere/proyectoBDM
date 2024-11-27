@@ -31,8 +31,8 @@ include("controladores/ObtenerCurso.php"); ?>
                 <p class="fw-bold text-white">Calificación <?php echo $curso->calificacion ?>/5</p>
                 <a href="#detalle-curso" class="color-btn">Mas detalles</a>
                 <div class="mt-3">
-                    <a href="#" class="">Inteligencia Artificial</a>,
-                    <a href="#" class="">Programacion</a>
+                    <a href="/search?cat=<?php echo $curso->categoriaID; ?>"
+                        class=""><?php echo $curso->categoriaNombre; ?></a>
                 </div>
             </div>
         </header>
@@ -51,17 +51,38 @@ include("controladores/ObtenerCurso.php"); ?>
                         </thead>
                         <tbody>
                             <?php foreach ($lecciones as $leccion): ?>
+                                <?php
+                                $leccionComprada = false;
+                                $leccionCompletada = false;
+                                foreach ($leccionesUsuario as $leccionU) {
+                                    if ($leccionU['LeccionID'] == $leccion->leccionID) {
+                                        $leccionComprada = true;
+                                        if ($leccionU['Leido']) {
+                                            $leccionCompletada = true;
+                                        }
+                                        break;
+                                    }
+                                }
+                                ?>
                                 <tr>
                                     <td style="width: 33%;"><a href="#javascript-react">
                                             <?php echo $leccion->nombre ?></a></td>
                                     <td style="width: 33%;">
                                         <?php if ($usuarioLoggeado) { ?>
-                                            <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>✔️ ❌ <?php }
+                                            <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") {
+                                                if ($leccionCompletada) {
+                                                    echo ("✔️");
+                                                } else {
+                                                    echo ("❌");
+                                                }
+                                            }
                                         } ?>
                                     </td>
                                     <td style="width: 33%;">
                                         <?php if ($usuarioLoggeado) { ?>
-                                            <?php if ($leccion->costo > 0) { ?>
+
+                                            <?php if (!$leccionComprada) {
+                                                ?>
                                                 <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?> <a href="#"
                                                         class="transparent-btn" data-bs-toggle="modal"
                                                         data-bs-target="#purchaseModal-<?php echo $leccion->leccionID ?>">Comprar
@@ -118,8 +139,7 @@ include("controladores/ObtenerCurso.php"); ?>
                                                 <a href="/curso.php?id=<?php echo $leccion->cursoID ?>&nivel=<?php echo $leccion->leccionID ?>"
                                                     class="transparent-btn">Ver Leccion</a>
                                             <?php } ?>
-                                            <a href="/curso.php?id=<?php echo $leccion->cursoID ?>&nivel=<?php echo $leccion->leccionID ?>"
-                                                class="transparent-btn">Ver Leccion</a>
+
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -131,8 +151,15 @@ include("controladores/ObtenerCurso.php"); ?>
                         <?php if ($usuarioLoggeado) { ?>
 
                             <?php if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>
-                                <a type="button" href="#" class="mt-4 transparent-btn" style="display:block"
-                                    data-bs-toggle="modal" data-bs-target="#purchaseModal-full">Comprar todo el curso <?php echo $curso->costoGeneral ?>$</a>
+                                <?php
+                                if (!$cursoComprado) {
+                                    ?>
+                                    <a type="button" href="#" class="mt-4 transparent-btn" style="display:block"
+                                        data-bs-toggle="modal" data-bs-target="#purchaseModal-full">Comprar todo el curso
+                                        <?php echo $curso->costoGeneral ?>$</a>
+                                    <?php
+                                }
+                                ?>
                                 <!-- Modal -->
                                 <div class="modal fade" id="purchaseModal-full" tabindex="-1"
                                     aria-labelledby="purchaseModalLabel" aria-hidden="true">
@@ -176,24 +203,24 @@ include("controladores/ObtenerCurso.php"); ?>
                                         </div>
                                     </div>
                                 </div>
-
-                                <a type="button" href="/diploma.php?id=<?php echo $cursoID ?>" data-curso="<?php $cursoID ?>"
-                                    class="mt-4 color-btn" style="display:block">Curso
-                                    completado!</a>
+                                <?php if ($cursoTerminado) { ?>
+                                    <a type="button" href="/diploma.php?id=<?php echo $cursoID ?>" data-curso="<?php $cursoID ?>"
+                                        class="mt-4 color-btn" style="display:block">Curso
+                                        completado!</a>
+                                <?php } ?>
                             <?php }
                         } ?>
                     </div>
                 </div>
 
-                <div class="texto mt-5">
+                <div class="texto mt-5" id="comentarios">
                     <h2>Comentarios</h2>
                     <?php if ($usuarioLoggeado) {
-                        if ($usuarioLoggeado->tipoUsuario == "Estudiante") { ?>
-                            <form id="commentForm" class="mb-4">
+                        if ($usuarioLoggeado->tipoUsuario == "Estudiante" && $cursoComprado) { ?>
+                            <form id="commentForm" class="mb-4" method="post" action="/controladores/insertarComentario.php">
                                 <div class="mb-3 mt-4">
                                     <label for="rating" class="form-label">Calificación</label>
-
-                                    <select id="rating" name="rating" required>
+                                    <select id="rating" name="calificacion" required>
                                         <option disabled selected value="">Selecciona una calificación</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -204,8 +231,11 @@ include("controladores/ObtenerCurso.php"); ?>
                                 </div>
                                 <div class="mb-3">
                                     <label for="commentContent" class="form-label">Comentario</label>
-                                    <textarea class="form-control" id="commentContent" rows="3" required></textarea>
+                                    <textarea class="form-control" name="comentario" id="commentContent" rows="3"
+                                        required></textarea>
                                 </div>
+                                <input type="hidden" value="<?php echo $cursoID ?>" name="curso">
+                                <input type="hidden" value="<?php echo $usuarioLoggeado->usuarioID ?>" name="usuario">
                                 <button type="submit" class="btn color-btn">Agregar Comentario</button>
                             </form>
                         <?php } ?> <?php } ?>
@@ -220,18 +250,6 @@ include("controladores/ObtenerCurso.php"); ?>
                                 <h6 class="card-subtitle mb-2 text-muted">Calificación: 4/5</h6>
                                 <p class="card-text">Muy buen curso</p>
                                 <p class="card-text"><small class="text-muted">Fecha: 20/09/2024</small></p>
-                            </div>
-                        </div>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-2">
-                                    <img src="/media/curso3.png" alt="Ana Gómez" class="rounded-circle me-3" width="50"
-                                        height="50">
-                                    <h5 class="card-title mb-0">Ana Gómez</h5>
-                                </div>
-                                <h6 class="card-subtitle mb-2 text-muted">Calificación: 5/5</h6>
-                                <p class="card-text">Excelente curso!, muy claro y conciso.</p>
-                                <p class="card-text"><small class="text-muted">Fecha: 19/09/2024</small></p>
                             </div>
                         </div>
                     </div>

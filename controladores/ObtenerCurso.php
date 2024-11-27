@@ -9,6 +9,15 @@ $conexion = $database->conectarBD();
 $cursoID = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($cursoID > 0) {
+    // Obtener el usuario loggeado
+    $usuarioLoggeado = isset($_SESSION['usuarioLoggeado']) ? unserialize($_SESSION['usuarioLoggeado']) : null;
+    $usuarioID = $usuarioLoggeado ? $usuarioLoggeado->usuarioID : 0;
+
+    // Validar que el usuario esté loggeado
+    if ($usuarioID === 0) {
+        die('Usuario no loggeado.');
+    }
+
     // Llamar al procedimiento almacenado para obtener el curso por ID
     $sqlSelectCurso = "CALL ObtenerCurso({$cursoID})";
     if ($resultCurso = mysqli_query($conexion, $sqlSelectCurso)) {
@@ -38,9 +47,29 @@ if ($cursoID > 0) {
         die('Error al obtener el curso: ' . mysqli_error($conexion));
     }
 
+    // Validar si el usuario está inscrito en el curso y si está terminado
+    $sqlCheckCurso = "SELECT * FROM UsuarioCurso WHERE UsuarioID = ? AND CursoID = ?";
+    $stmtCheckCurso = $conexion->prepare($sqlCheckCurso);
+    $stmtCheckCurso->bind_param('ii', $usuarioID, $cursoID);
+    $cursoTerminado = false;
+    $cursoComprado = false;
+
+    if ($stmtCheckCurso->execute()) {
+        $resultCheckCurso = $stmtCheckCurso->get_result();
+        if ($row = $resultCheckCurso->fetch_assoc()) {
+            $cursoComprado = true;
+            $cursoTerminado = $row['Terminado'];
+        }
+        $resultCheckCurso->free();
+    }
+
+    $stmtCheckCurso->close();
+
     // Llamar al procedimiento almacenado para obtener las lecciones del curso por ID
     $sqlSelectLecciones = "CALL ObtenerLeccionesPorCurso({$cursoID})";
     $lecciones = array();
+    $leccionesUsuario = array();
+
     if ($resultLecciones = mysqli_query($conexion, $sqlSelectLecciones)) {
         while ($row = mysqli_fetch_assoc($resultLecciones)) {
             $leccion = new Leccion(
@@ -61,20 +90,30 @@ if ($cursoID > 0) {
         die('Error al obtener las lecciones: ' . mysqli_error($conexion));
     }
 
+    // Asegurar que el siguiente resultado está disponible
+    mysqli_next_result($conexion);
+
+    // Obtener las lecciones que el usuario ha comprado
+    $sqlSelectLeccionesUsuario = " SELECT UL.LeccionID, UL.Leido FROM UsuarioLeccion UL INNER JOIN Leccion L ON UL.LeccionID = L.LeccionID WHERE UL.UsuarioID = ? AND L.CursoID = ?";
+    $stmtLeccionesUsuario = $conexion->prepare($sqlSelectLeccionesUsuario);
+    $stmtLeccionesUsuario->bind_param('ii', $usuarioID, $cursoID);
+    if ($stmtLeccionesUsuario->execute()) {
+        $resultLeccionesUsuario = $stmtLeccionesUsuario->get_result();
+        while ($row = $resultLeccionesUsuario->fetch_assoc()) {
+            $leccionesUsuario[] = ['LeccionID' => $row['LeccionID'], 'Leido' => $row['Leido']];
+        }
+        $resultLeccionesUsuario->free();
+    }
+    $stmtLeccionesUsuario->close();
+
+    // Actualizar la última visita de lección
+    $sqlActualizarVisita = "CALL ActualizarUltimaVisitaDeLeccion(?, ?)";
+    $stmtActualizarVisita = $conexion->prepare($sqlActualizarVisita);
+    $stmtActualizarVisita->bind_param('ii', $usuarioID, $cursoID);
+    $stmtActualizarVisita->execute();
+    $stmtActualizarVisita->close();
+
 } else {
     echo 'ID del curso no válido';
 }
-
-mysqli_close($conexion);
-
-// Puedes imprimir el curso y las lecciones o redirigir a otra página
-/*
-echo 'CursoID: ' . $curso->cursoID . '<br>';
-echo 'Nombre: ' . $curso->nombre . '<br>';
-
-foreach ($lecciones as $leccion) {
-    echo 'LeccionID: ' . $leccion->leccionID . '<br>';
-    echo 'Nombre: ' . $leccion->nombre . '<br>';
-}
-*/
 ?>

@@ -595,3 +595,24 @@ BEGIN
     WHERE Leccion.CursoID = p_CursoID
       AND Leccion.BorradoLogico = FALSE;
 END$$
+
+DELIMITER $$
+CREATE PROCEDURE ObtenerComentariosPorCurso(
+    IN p_CursoID INT
+)
+BEGIN
+    SELECT 
+        C.Texto,
+        C.Calificacion,
+        C.FechaCreacion,
+        U.Nombre AS UsuarioNombre
+    FROM 
+        Comentario C
+        INNER JOIN Usuario U ON C.UsuarioID = U.UsuarioID
+    WHERE 
+        C.CursoID = p_CursoID AND C.BorradoLogico = FALSE
+    ORDER BY 
+        C.FechaCreacion DESC;
+END$$
+
+DELIMITER ;
