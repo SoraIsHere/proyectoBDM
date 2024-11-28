@@ -102,12 +102,15 @@ mysqli_close($conexion);
             <div class="container">
                 <div class="mb-5">
                     <h1 class="m-0">Mis Ventas de Cursos</h1>
-                    <a href="/crearCurso.php" class="color-btn mt-4 d-block"
+                    <a href="./crearCurso.php" class="color-btn mt-4 d-block"
                         style="text-align:center; width:fit-content">Nuevo Curso</a>
+
+                        <a href="./misCursos.php" class="color-btn mt-4 d-block"
+                        style="text-align:center; width:fit-content">Mis Cursos</a>
 
                 </div>
                 <h2>Filtros</h2>
-                <form action="/ventas.php">
+                <form action="./ventas.php">
                     <label for="fecha-inicio">Fecha de Creación (Inicio):</label>
                     <input type="date" id="fecha-inicio" name="fecha-inicio">
 
