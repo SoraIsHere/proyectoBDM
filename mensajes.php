@@ -79,7 +79,7 @@ mysqli_close($conexion);
 
     <style>
         .mensajes {
-            max-height: 45vh;
+            height: 200px;
         }
     </style>
     <script>
