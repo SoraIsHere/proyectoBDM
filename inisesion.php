@@ -24,16 +24,16 @@
                     <h1>Iniciar Sesión</h1>
                     <div>Inicie sesión para poder obtener acceso completo a nuestros cursos</div>
                 </div>
-                <form class="login-card-form" method="POST" action="/controladores/Login.php" >
+                <form id="loginForm"class="login-card-form" method="POST" action="controladores/Login.php" >
                     <div class="form-item">
                         <span class="form-item-icon material-symbols-rounded">mail</span>
                         <input type="text" name="email" placeholder="Enter Email" id="emailForm"
-                            autofocus required>
+                            autofocus>
                     </div>
                     <div class="form-item">
                         <span class="form-item-icon material-symbols-rounded"> lock</span>
                         <input type="password" name="contraseña" placeholder="Enter Password" id="passwordForm"
-                            required>
+                            >
                     </div>
                     <button type="submit" class="color-btn">Sign In</button>
                 </form>
@@ -46,6 +46,25 @@
     </main>
 
 </body>
+<script>
+        document.getElementById("loginForm").onsubmit = function() {
+            var email = document.getElementById("emailForm").value.trim();
+            var pass = document.getElementById("passwordForm").value.trim();
+
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+            if (email === "" || !emailPattern.test(email)) {
+                alert("Introduce un correo electrónico válido.");
+                return false;
+            }
+            if (pass === "") {
+                alert("El campo de contraseña no debe estar vacío");
+                return false;
+            }
+            return true;
+        }
+    </script>
 
 <?php include("footer.php") ?>
 

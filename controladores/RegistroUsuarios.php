@@ -26,6 +26,6 @@ if (!mysqli_query($conexion, $sqlInsert)) {
     die('Error: ' . mysqli_error($conexion));
 }
 
-header("Location: /inisesion.php");
+header("Location: ../inisesion.php");
 mysqli_close($conexion);
 ?>

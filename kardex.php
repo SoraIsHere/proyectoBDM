@@ -76,6 +76,7 @@ mysqli_close($conexion);
                         <?php  // Configurar la localización en español
                         $locale = 'es_ES';
                         $fechaNacimiento = $usuarioLoggeado->fechaNacimiento;
+                        
                         $date = new DateTime($fechaNacimiento);
 
                         // Crear el formateador de fecha
@@ -89,9 +90,11 @@ mysqli_close($conexion);
 
                         // Formatear la fecha
                         $fechaFormateada = $formatter->format($date);
-
+                        
                         echo $fechaFormateada; // Salida esperada: 30 de octubre del 2024
                         ?>
+
+                    <script>console.log(<?php echo $fechaFormateada ?>)</script>
                     </p>
                     <p>Género: <?php echo $usuarioLoggeado->genero ?></p>
                     <p>Email: <?php echo $usuarioLoggeado->email ?></p>
@@ -103,7 +106,6 @@ mysqli_close($conexion);
                             href="/api/userInfo.php?usuarioID=<?php echo $usuarioLoggeado->usuarioID ?>"
                             target="_blank">Bajar mi
                             informacion</a>
-
                     <?php } ?>
                 </div>
             </div>

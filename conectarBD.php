@@ -1,7 +1,7 @@
 <?php
 class db {
     public function conectarBD() {
-        $conexion = mysqli_connect("localhost:3306", "root", "1234");
+        $conexion = mysqli_connect("localhost:3306", "root", "localhost");
 
         if (!$conexion) {
             die('Error al conectarse con la base de datos: ' . mysqli_connect_error());
