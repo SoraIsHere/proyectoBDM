@@ -184,8 +184,8 @@ BEGIN
     ORDER BY 
         C.FechaCreacion DESC;
 END$$
-
 DELIMITER $$
+
 CREATE PROCEDURE ReporteInstructores()
 BEGIN
     SELECT 
@@ -209,7 +209,7 @@ BEGIN
         U.UsuarioID, U.Nombre, U.FechaModificacion;
 END$$
 
-DELIMITER $$
+DELIMITER ;
 
 CREATE PROCEDURE ReporteEstudiantes()
 BEGIN

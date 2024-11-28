@@ -33,7 +33,7 @@ mysqli_next_result($conexion);
 
 // Verifica si el usuario está loggeado 
 if (!isset($_SESSION['usuarioLoggeado'])) {
-    header("Location: login.php?error=usuario_no_loggeado");
+    header("Location: inisesion.php?error=usuario_no_loggeado");
     exit;
 }
 
