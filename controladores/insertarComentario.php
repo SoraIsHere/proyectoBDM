@@ -38,7 +38,7 @@ if (isset($_SESSION['usuarioLoggeado'])) {
     }
 } else {
     // Redirigir al usuario a la página de inicio de sesión
-    header("Location: /login.php?error=usuario_no_loggeado");
+    header("Location: /inisesion.php?error=usuario_no_loggeado");
     exit;
 }
 ?>

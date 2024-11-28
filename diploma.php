@@ -5,7 +5,7 @@ include('conectarBD.php');
 include('modelos/Usuarios.php');
 include('modelos/Curso.php'); // Verifica si el usuario está loggeado 
 if (!isset($_SESSION['usuarioLoggeado'])) {
-    header("Location: /login.php?error=usuario_no_loggeado");
+    header("Location: /inisesion.php?error=usuario_no_loggeado");
     exit;
 }
 $usuarioLoggeado = unserialize($_SESSION['usuarioLoggeado']);

@@ -143,7 +143,7 @@ if (isset($_SESSION['usuarioLoggeado'])) {
     }
 } else {
     echo "Error: Usuario no loggeado.";
-    header("Location: /login.php?error=usuario_no_loggeado");
+    header("Location: /inisesion.php?error=usuario_no_loggeado");
     exit;
 
 }
