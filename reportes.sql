@@ -268,8 +268,3 @@ BEGIN
     WHERE 
         UL.UsuarioID = p_UsuarioID;
 END$$
-
-DELIMITER ;
-call GetUsuarioInfo(
-    2
-);
