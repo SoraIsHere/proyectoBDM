@@ -16,8 +16,7 @@ BEGIN
     JOIN 
         Usuario U ON C.CreadorID = U.UsuarioID
     WHERE 
-        UC.UsuarioID = p_AlumnoID
-        AND UC.Terminado = TRUE;
+        UC.UsuarioID = p_AlumnoID;
 END$$
 
 DELIMITER ;
