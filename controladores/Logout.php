@@ -5,5 +5,5 @@ session_start();
 $_SESSION['usuarioLoggeado'] = null;
 
 // Redirigir al índice
-header("Location:/inisesion.php");
+header("Location:../inisesion.php");
 

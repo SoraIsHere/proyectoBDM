@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['usuarioLoggeado'] = serialize($usuario);
 
             // Redirigir al índice
-            header("Location:/index.php");
+            header("Location:../index.php");
             exit;
         } else {
             // Redirigir a la página de inicio de sesión con mensaje de error

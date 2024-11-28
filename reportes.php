@@ -138,12 +138,12 @@ mysqli_close($conexion);
                                     <div class="mb-3">
                                         <label for="nombreCategoria" class="form-label">Nombre</label>
                                         <input type="text" class="form-control px-3" id="nombreCategoria" name="nombre"
-                                            required>
+                                            >
                                     </div>
                                     <div class="mb-3">
                                         <label for="descripcionCategoria" class="form-label">Descripción</label>
                                         <textarea class="form-control" id="descripcionCategoria" name="descripcion"
-                                            rows="3" required></textarea>
+                                            rows="3" ></textarea>
                                     </div>
                                     <button type="submit" class="color-btn">Guardar</button>
                                 </form>
@@ -235,6 +235,21 @@ mysqli_close($conexion);
             alert('Categoria Editada');
         }
     }
+
+    document.getElementById("formCrearCategoria").onsubmit = function() {
+            var nombre = document.getElementById("nombreCategoria").value.trim();
+            var descripcion = document.getElementById("descripcionCategoria").value.trim();
+
+            if (nombre === "") {
+                alert("El campo de nombre no debe estar vacío");
+                return false;
+            }
+            if (descripcion === "") {
+                alert("El campo de descripcion no debe estar vacío");
+                return false;
+            }
+            return true;
+        }
 </script>
 <?php include("footer.php") ?>
 
