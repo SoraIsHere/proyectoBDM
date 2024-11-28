@@ -76,6 +76,12 @@ mysqli_close($conexion);
             </div>
         </section>
     </main>
+
+    <style>
+        .mensajes {
+            max-height: 45vh;
+        }
+    </style>
     <script>
         function cargarMensajes(receptorID) {
             $.ajax({
@@ -96,6 +102,7 @@ mysqli_close($conexion);
                                 mensajesHTML += '<div class="mensaje">' + emisor + ': ' + mensaje.Texto + '</div>';
                             });
                             document.querySelector(".mensajes").innerHTML = mensajesHTML;
+                            document.querySelector(".mensajes").scrollTop = document.querySelector(".mensajes").scrollHeight;
                         } else {
                             console.log("Error al obtener los mensajes: " + jsonResponse.message);
                         }
@@ -116,6 +123,7 @@ mysqli_close($conexion);
                     cargarMensajes(receptorID);
                 }
             }
+
             $(".entrada-mensaje").keypress(function (event) {
                 if (event.which == 13) {
                     event.preventDefault();
@@ -136,6 +144,7 @@ mysqli_close($conexion);
                                 if (jsonResponse.status == 'success') {
                                     console.log("Mensaje enviado correctamente");
                                     cargarMensajes(receptorID); // Recargar mensajes
+                                    document.querySelector(".mensajes").scrollTop = document.querySelector(".mensajes").scrollHeight;
                                 } else {
                                     console.log("Error al enviar el mensaje: " + jsonResponse.message);
                                 }
@@ -159,11 +168,13 @@ mysqli_close($conexion);
                 document.querySelector(".mensajes").setAttribute("data-user", usuarioID);
                 document.querySelector(".mensajes").setAttribute("data-name", nombreUsuario);
                 cargarMensajes(usuarioID); // Cargar mensajes al seleccionar un usuario
+                document.querySelector(".mensajes").scrollTop = document.querySelector(".mensajes").scrollHeight;
             });
-            
-            setInterval(iniciarActualizacionMensajes, 2000);
+
+            setInterval(iniciarActualizacionMensajes, 2000); // Llamar a cargarMensajes cada 2 segundos
         });
     </script>
+
 </body>
 
 <?php include("footer.php") ?>
