@@ -26,12 +26,12 @@ if (isset($_SESSION['usuarioLoggeado'])) {
 <link rel="stylesheet" href="css/style.css">
 <nav class="nav-menu">
     <div class="nav-container">
-        <a href="./index.php" class="logo-container" style="margin: 0; display: flex">
+        <a href="/" class="logo-container" style="margin: 0; display: flex">
             <img src="media/logo.png" alt="Logo de WebLearning" class="logo-footer"
                 style="height: 70px; width:70px; aspect-ratio: 1; margin: 0px;">
         </a>
         <ul class="nav-links">
-            <li><a href="./index.php">Inicio</a></li>
+            <li><a href="/">Inicio</a></li>
         </ul>
         <div class="nav-buttons">
             <?php if ($usuarioLoggeado == null) { ?>
@@ -45,27 +45,27 @@ if (isset($_SESSION['usuarioLoggeado'])) {
                     echo '<img src="' . $fotoUrl . '" alt="Foto del Usuario" class="logo-footer" style="height: 50px; width:50px; aspect-ratio: 1; margin: 0px;object-fit:cover">';
                     ?>
                     <div class="menu-flotante">
-                        <a href="./kardex.php">
+                        <a href="/kardex.php">
                             Perfil
                         </a>
                         <?php if ($usuarioLoggeado->tipoUsuario == "Administrador") { ?>
-                            <a href="./reportes.php">
+                            <a href="/reportes.php">
                                 Reportes
                             </a>
                         <?php } ?>
 
                         <?php if ($usuarioLoggeado->tipoUsuario == "Instructor") { ?>
-                            <a href="./ventas.php">
+                            <a href="/ventas.php">
                                 Ventas
                             </a>
                         <?php } ?>
 
                         <?php if ($usuarioLoggeado->tipoUsuario !== "Administrador") { ?>
-                            <a href="./mensajes.php">
+                            <a href="/mensajes.php">
                                 Mensajes
                             </a>
                         <?php } ?>
-                        <a href="./controladores/logout.php">
+                        <a href="/controladores/logout.php">
                             Cerrar Sesion
                         </a>
                     </div>

@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $updateCursoQuery = "UPDATE curso SET Nombre='$nombre', Descripcion='$descripcion', CostoGeneral='$costoGeneral' WHERE CursoID=$cursoID";
         if ($conexion->query($updateCursoQuery)) {
-            echo "<script>alert('El curso se actualizó correctamente.'); window.location.href='/misCursos.php';</script>";
+            echo "<script>alert('El curso se actualizó correctamente.'); window.location.reload();</script>";
         } else {
             echo "<p>Error al actualizar el curso: " . $conexion->error . "</p>";
         }
