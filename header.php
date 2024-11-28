@@ -60,10 +60,11 @@ if (isset($_SESSION['usuarioLoggeado'])) {
                             </a>
                         <?php } ?>
 
-                        <?php ?>
-                        <a href="/mensajes.php">
-                            Mensajes
-                        </a>
+                        <?php if ($usuarioLoggeado->tipoUsuario !== "Administrador") { ?>
+                            <a href="/mensajes.php">
+                                Mensajes
+                            </a>
+                        <?php } ?>
                         <a href="/controladores/logout.php">
                             Cerrar Sesion
                         </a>

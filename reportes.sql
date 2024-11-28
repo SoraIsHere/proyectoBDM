@@ -238,15 +238,19 @@ CREATE PROCEDURE GetUsuarioInfo(
     IN p_UsuarioID INT
 )
 BEGIN
-    -- Información del Usuario
     SELECT 
         UsuarioID, Nombre, Apellido, Genero, FechaNacimiento, Foto, Email, TipoUsuario, FechaModificacion, BorradoLogico, FechaEliminacion
     FROM 
         Usuario 
     WHERE 
         UsuarioID = p_UsuarioID;
-
-    -- Cursos en los que está inscrito el Usuario
+END$$
+DELIMITER ;
+DELIMITER $$
+CREATE PROCEDURE GetCursosUsuario(
+    IN p_UsuarioID INT
+)
+BEGIN
     SELECT 
         C.CursoID, C.Nombre AS CursoNombre, C.CostoGeneral, C.Descripcion, C.Calificacion, C.CategoriaID, C.CreadorID, C.Imagen, C.BorradoLogico, C.FechaCreacion, C.FechaEliminacion,
         UC.Terminado, UC.FechaFinalizacion, UC.FechaInscripcion, UC.UltimaVisitaDeLeccion, UC.FormaPago
@@ -256,8 +260,14 @@ BEGIN
         Curso C ON UC.CursoID = C.CursoID
     WHERE 
         UC.UsuarioID = p_UsuarioID;
+END$$
+DELIMITER ;
 
-    -- Lecciones de los cursos en los que está inscrito el Usuario
+DELIMITER $$
+CREATE PROCEDURE GetLeccionesUsuario(
+    IN p_UsuarioID INT
+)
+BEGIN
     SELECT 
         L.LeccionID, L.Nombre AS LeccionNombre, L.Costo, L.Orden, L.Descripcion, L.Video, L.CursoID, L.BorradoLogico, L.FechaEliminacion,
         UL.Leido
@@ -268,3 +278,6 @@ BEGIN
     WHERE 
         UL.UsuarioID = p_UsuarioID;
 END$$
+DELIMITER ;
+
+
