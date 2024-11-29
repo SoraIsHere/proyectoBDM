@@ -121,33 +121,44 @@ BEGIN
         UC.FormaPago;
 END$$
 
+CREATE VIEW VistaDetalleVentasCurso AS
+SELECT 
+    U.Nombre AS NombreAlumno,
+    UC.FechaInscripcion,
+    MAX(L.Orden) AS NivelAvance,
+    SUM(L.Costo) AS PrecioPagado,
+    UC.FormaPago,
+    UC.CursoID
+FROM 
+    UsuarioCurso UC
+JOIN 
+    Usuario U ON UC.UsuarioID = U.UsuarioID
+JOIN 
+    UsuarioLeccion UL ON UL.UsuarioID = UC.UsuarioID
+JOIN 
+    Leccion L ON UL.LeccionID = L.LeccionID
+WHERE 
+    UC.CursoID = L.CursoID
+GROUP BY 
+    U.UsuarioID, UC.FechaInscripcion, UC.FormaPago, UC.CursoID;
 
 DELIMITER $$
-
 CREATE PROCEDURE DetalleVentasCurso(
     IN p_CursoID INT
 )
 BEGIN
     SELECT 
-        U.Nombre AS NombreAlumno,
-        UC.FechaInscripcion,
-        MAX(L.Orden) AS NivelAvance,
-        SUM(L.Costo) AS PrecioPagado,
-        UC.FormaPago
+        NombreAlumno,
+        FechaInscripcion,
+        NivelAvance,
+        PrecioPagado,
+        FormaPago
     FROM 
-        UsuarioCurso UC
-    JOIN 
-        Usuario U ON UC.UsuarioID = U.UsuarioID
-    JOIN 
-        UsuarioLeccion UL ON UL.UsuarioID = UC.UsuarioID
-    JOIN 
-        Leccion L ON UL.LeccionID = L.LeccionID
+        VistaDetalleVentasCurso
     WHERE 
-        UC.CursoID = p_CursoID
-        AND L.CursoID = p_CursoID
-    GROUP BY 
-        U.UsuarioID, UC.FechaInscripcion, UC.FormaPago;
+        CursoID = p_CursoID;
 END$$
+
 
 
 DELIMITER $$
@@ -186,51 +197,59 @@ BEGIN
 END$$
 DELIMITER $$
 
+CREATE VIEW VistaReporteInstructores AS
+SELECT 
+    U.UsuarioID AS Usuario,
+    U.Nombre,
+    U.FechaModificacion AS FechaIngreso,
+    COUNT(DISTINCT C.CursoID) AS CantidadCursosOfrecidos,
+    SUM(L.Costo) AS TotalGanancias
+FROM 
+    Usuario U
+JOIN 
+    Curso C ON U.UsuarioID = C.CreadorID
+JOIN 
+    Leccion L ON C.CursoID = L.CursoID
+JOIN 
+    UsuarioLeccion UL ON L.LeccionID = UL.LeccionID
+WHERE 
+    U.TipoUsuario = 'Instructor'
+    AND U.BorradoLogico = FALSE
+GROUP BY 
+    U.UsuarioID, U.Nombre, U.FechaModificacion;
+
+DELIMITER $$
 CREATE PROCEDURE ReporteInstructores()
 BEGIN
-    SELECT 
-        U.UsuarioID AS Usuario,
-        U.Nombre,
-        U.FechaModificacion AS FechaIngreso,
-        COUNT(DISTINCT C.CursoID) AS CantidadCursosOfrecidos,
-        SUM(L.Costo) AS TotalGanancias
-    FROM 
-        Usuario U
-    JOIN 
-        Curso C ON U.UsuarioID = C.CreadorID
-    JOIN 
-        Leccion L ON C.CursoID = L.CursoID
-    JOIN 
-        UsuarioLeccion UL ON L.LeccionID = UL.LeccionID
-    WHERE 
-        U.TipoUsuario = 'Instructor'
-        AND U.BorradoLogico = FALSE
-    GROUP BY 
-        U.UsuarioID, U.Nombre, U.FechaModificacion;
+    SELECT * FROM VistaReporteInstructores;
 END$$
-
 DELIMITER ;
 
+
+
+CREATE VIEW VistaReporteEstudiantes AS
+SELECT 
+    U.UsuarioID AS Usuario,
+    U.Nombre,
+    U.FechaModificacion AS FechaIngreso,
+    COUNT(UC.CursoID) AS CantidadCursosInscritos,
+    (COUNT(CASE WHEN UC.Terminado = TRUE THEN 1 END) / COUNT(UC.CursoID)) * 100 AS PorcentajeCursosTerminados
+FROM 
+    Usuario U
+JOIN 
+    UsuarioCurso UC ON U.UsuarioID = UC.UsuarioID
+WHERE 
+    U.TipoUsuario = 'Estudiante'
+    AND U.BorradoLogico = FALSE
+GROUP BY 
+    U.UsuarioID, U.Nombre, U.FechaModificacion;
+DELIMITER $$
 CREATE PROCEDURE ReporteEstudiantes()
 BEGIN
-    SELECT 
-        U.UsuarioID AS Usuario,
-        U.Nombre,
-        U.FechaModificacion AS FechaIngreso,
-        COUNT(UC.CursoID) AS CantidadCursosInscritos,
-        (COUNT(CASE WHEN UC.Terminado = TRUE THEN 1 END) / COUNT(UC.CursoID)) * 100 AS PorcentajeCursosTerminados
-    FROM 
-        Usuario U
-    JOIN 
-        UsuarioCurso UC ON U.UsuarioID = UC.UsuarioID
-    WHERE 
-        U.TipoUsuario = 'Estudiante'
-        AND U.BorradoLogico = FALSE
-    GROUP BY 
-        U.UsuarioID, U.Nombre, U.FechaModificacion;
+    SELECT * FROM VistaReporteEstudiantes;
 END$$
-
 DELIMITER ;
+
 
 /*Este es para la otra materia del api*/
 DELIMITER $$
@@ -263,21 +282,29 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+CREATE VIEW VistaLecciones AS
+SELECT 
+    L.LeccionID, L.Nombre AS LeccionNombre, L.Costo, L.Orden, L.Descripcion, L.Video, L.CursoID, L.BorradoLogico, L.FechaEliminacion,
+    UL.Leido, UL.UsuarioID
+FROM 
+    UsuarioLeccion UL
+JOIN 
+    Leccion L ON UL.LeccionID = L.LeccionID;
+
 DELIMITER $$
 CREATE PROCEDURE GetLeccionesUsuario(
     IN p_UsuarioID INT
 )
 BEGIN
     SELECT 
-        L.LeccionID, L.Nombre AS LeccionNombre, L.Costo, L.Orden, L.Descripcion, L.Video, L.CursoID, L.BorradoLogico, L.FechaEliminacion,
-        UL.Leido
+        LeccionID, LeccionNombre, Costo, Orden, Descripcion, Video, CursoID, BorradoLogico, FechaEliminacion, Leido
     FROM 
-        UsuarioLeccion UL
-    JOIN 
-        Leccion L ON UL.LeccionID = L.LeccionID
+        VistaLecciones
     WHERE 
-        UL.UsuarioID = p_UsuarioID;
+        UsuarioID = p_UsuarioID;
 END$$
 DELIMITER ;
+
 
 

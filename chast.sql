@@ -19,8 +19,6 @@ BEGIN
         UC.UsuarioID = p_AlumnoID;
 END$$
 
-DELIMITER ;
-
 DELIMITER $$
 
 CREATE PROCEDURE ObtenerMensajesChat(
@@ -43,7 +41,6 @@ BEGIN
     ORDER BY 
         FechaEnvio ASC;
 END$$
-
 DELIMITER $$
 
 CREATE PROCEDURE ObtenerUsuariosConMensajes(

@@ -468,7 +468,7 @@ FOR EACH ROW
 BEGIN
     DECLARE promedio DECIMAL(5,2);
 
-    SELECT CEIL(AVG(Calificacion))
+    SELECT COALESCE(GREATEST(CEIL(AVG(Calificacion)), 1), 1)
     INTO promedio
     FROM Comentario
     WHERE CursoID = OLD.CursoID
@@ -478,6 +478,55 @@ BEGIN
     SET Calificacion = promedio
     WHERE CursoID = OLD.CursoID;
 END$$
+DELIMITER ;
+
+CREATE VIEW CursosMasRecientes AS
+SELECT 
+    Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre
+FROM 
+    Curso
+JOIN 
+    Categoria ON Curso.CategoriaID = Categoria.CategoriaID
+WHERE 
+    Curso.BorradoLogico = FALSE
+ORDER BY 
+    Curso.FechaCreacion DESC;
+    
+    
+CREATE VIEW CursosMasVentas AS
+SELECT 
+    Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre, COUNT(UsuarioCurso.CursoID) AS Ventas
+FROM 
+    Curso
+JOIN 
+    UsuarioCurso ON Curso.CursoID = UsuarioCurso.CursoID
+JOIN 
+    Usuario ON UsuarioCurso.UsuarioID = Usuario.UsuarioID
+JOIN 
+    Categoria ON Curso.CategoriaID = Categoria.CategoriaID
+WHERE 
+    Curso.BorradoLogico = FALSE
+    AND Usuario.BorradoLogico = FALSE
+GROUP BY 
+    Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico, Categoria.Nombre
+HAVING 
+    Ventas > 0
+ORDER BY 
+    Ventas DESC;
+    
+    
+CREATE VIEW CursosMejorCalificados AS
+SELECT 
+    Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre
+FROM 
+    Curso
+JOIN 
+    Categoria ON Curso.CategoriaID = Categoria.CategoriaID
+WHERE 
+    Curso.BorradoLogico = FALSE
+ORDER BY 
+    Curso.Calificacion DESC;
+
 
 DELIMITER $$
 CREATE PROCEDURE ObtenerCursosInicio(
@@ -485,51 +534,39 @@ CREATE PROCEDURE ObtenerCursosInicio(
     IN p_Limit INT
 )
 BEGIN
+    -- Establecer un valor predeterminado para p_Limit si es NULL o 0
     IF p_Limit IS NULL OR p_Limit = 0 THEN
         SET p_Limit = 3; 
     END IF;
 
-    IF p_Criterio = 0 THEN /* mejor calificados */
-        SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre
-        FROM Curso
-        JOIN Categoria ON Curso.CategoriaID = Categoria.CategoriaID
-        WHERE Curso.BorradoLogico = FALSE
-        ORDER BY Curso.Calificacion DESC
-        LIMIT p_Limit;
-    ELSEIF p_Criterio = 1 THEN /* más ventas */
-        SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre, COUNT(UsuarioCurso.CursoID) AS Ventas
-        FROM Curso
-        JOIN UsuarioCurso ON Curso.CursoID = UsuarioCurso.CursoID
-        JOIN Usuario ON UsuarioCurso.UsuarioID = Usuario.UsuarioID
-        JOIN Categoria ON Curso.CategoriaID = Categoria.CategoriaID
-        WHERE Curso.BorradoLogico = FALSE
-        AND Usuario.BorradoLogico = FALSE
-        GROUP BY Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico, Categoria.Nombre
-        HAVING Ventas > 0
-        ORDER BY Ventas DESC
-        LIMIT p_Limit;
-    ELSEIF p_Criterio = 2 THEN /* más recientes */
-        SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre
-        FROM Curso
-        JOIN Categoria ON Curso.CategoriaID = Categoria.CategoriaID
-        WHERE Curso.BorradoLogico = FALSE
-        ORDER BY Curso.FechaCreacion DESC
-        LIMIT p_Limit;
+    -- Seleccionar la vista correspondiente basada en p_Criterio y aplicar p_Limit
+    IF p_Criterio = 0 THEN
+        SELECT * FROM CursosMejorCalificados LIMIT p_Limit;
+    ELSEIF p_Criterio = 1 THEN
+        SELECT * FROM CursosMasVentas LIMIT p_Limit;
+    ELSEIF p_Criterio = 2 THEN
+        SELECT * FROM CursosMasRecientes LIMIT p_Limit;
     ELSE
         SELECT 'Criterio no válido' AS Mensaje;
     END IF;
 END$$
-
 DELIMITER ;
+
+CREATE VIEW VistaCategorias AS
+SELECT 
+    CategoriaID, Nombre, Descripcion, CreadorID, FechaCreacion, BorradoLogico, FechaEliminacion
+FROM 
+    Categoria
+WHERE 
+    BorradoLogico = FALSE;
 
 
 DELIMITER $$
 CREATE PROCEDURE ObtenerCategorias()
 BEGIN
-    SELECT CategoriaID, Nombre, Descripcion, CreadorID, FechaCreacion, BorradoLogico, FechaEliminacion
-    FROM Categoria
-    WHERE BorradoLogico = FALSE;
+    SELECT * FROM VistaCategorias;
 END$$
+
 
 DELIMITER $$
 
@@ -559,7 +596,6 @@ BEGIN
     FROM Categoria
     WHERE BorradoLogico = FALSE and CreadorID = p_Usuario;
 END$$
-
 DELIMITER $$
 
 create  PROCEDURE ObtenerCategoria(
@@ -570,17 +606,54 @@ BEGIN
     WHERE CategoriaID = p_idCat;
 END$$
 
+
+CREATE VIEW VistaCurso AS
+SELECT 
+    Curso.CursoID, 
+    Curso.Nombre, 
+    Curso.CostoGeneral, 
+    Curso.Descripcion, 
+    Curso.Calificacion, 
+    Curso.CategoriaID, 
+    Curso.CreadorID, 
+    Curso.Imagen, 
+    Curso.BorradoLogico, 
+    Curso.FechaCreacion, 
+    Curso.FechaEliminacion, 
+    Categoria.BorradoLogico AS categoriaBorrada, 
+    Categoria.Nombre AS categoriaNombre
+FROM 
+    Curso
+JOIN 
+    Categoria ON Curso.CategoriaID = Categoria.CategoriaID
+WHERE 
+    Curso.BorradoLogico = FALSE;
+
 DELIMITER $$
 CREATE PROCEDURE ObtenerCurso(
     IN p_CursoID INT
 )
 BEGIN
-    SELECT Curso.CursoID, Curso.Nombre, Curso.CostoGeneral, Curso.Descripcion, Curso.Calificacion, Curso.CategoriaID, Curso.CreadorID, Curso.Imagen, Curso.BorradoLogico, Curso.FechaCreacion, Curso.FechaEliminacion, Categoria.BorradoLogico AS categoriaBorrada, Categoria.Nombre AS categoriaNombre
-    FROM Curso
-    JOIN Categoria ON Curso.CategoriaID = Categoria.CategoriaID
-    WHERE Curso.CursoID = p_CursoID
-      AND Curso.BorradoLogico = FALSE;
+    SELECT 
+        CursoID, 
+        Nombre, 
+        CostoGeneral, 
+        Descripcion, 
+        Calificacion, 
+        CategoriaID, 
+        CreadorID, 
+        Imagen, 
+        BorradoLogico, 
+        FechaCreacion, 
+        FechaEliminacion, 
+        categoriaBorrada, 
+        categoriaNombre
+    FROM 
+        VistaCurso
+    WHERE 
+        CursoID = p_CursoID;
 END$$
+
 
 DELIMITER $$
 CREATE PROCEDURE ObtenerLeccionesPorCurso(
@@ -593,32 +666,48 @@ BEGIN
       AND Leccion.BorradoLogico = FALSE;
 END$$
 
-DELIMITER $$
+CREATE VIEW VistaComentariosPorCurso AS
+SELECT 
+    C.ComentarioID,
+    C.Texto,
+    C.UsuarioID,
+    U.Nombre AS UsuarioNombre,
+    C.Calificacion,
+    C.CursoID,
+    C.BorradoLogico,
+    C.FechaEliminacion,
+    C.FechaCreacion
+FROM 
+    Comentario C
+    INNER JOIN Usuario U ON C.UsuarioID = U.UsuarioID
+WHERE 
+    C.BorradoLogico = FALSE
+ORDER BY 
+    C.FechaCreacion DESC;
+ DELIMITER $$
 CREATE PROCEDURE ObtenerComentariosPorCurso(
     IN p_CursoID INT
 )
 BEGIN
     SELECT 
-        C.ComentarioID,
-        C.Texto,
-        C.UsuarioID,
-        U.Nombre AS UsuarioNombre,
-        C.Calificacion,
-        C.CursoID,
-        C.BorradoLogico,
-        C.FechaEliminacion,
-        C.FechaCreacion
+        ComentarioID,
+        Texto,
+        UsuarioID,
+        UsuarioNombre,
+        Calificacion,
+        CursoID,
+        BorradoLogico,
+        FechaEliminacion,
+        FechaCreacion
     FROM 
-        Comentario C
-        INNER JOIN Usuario U ON C.UsuarioID = U.UsuarioID
+        VistaComentariosPorCurso
     WHERE 
-        C.CursoID = p_CursoID AND C.BorradoLogico = FALSE
-    ORDER BY 
-        C.FechaCreacion DESC;
+        CursoID = p_CursoID;
 END$$
 
-DELIMITER $$
 
+
+DELIMITER $$
 CREATE PROCEDURE completarLeccion(
     IN p_UsuarioID INT,
     IN p_LeccionID INT
