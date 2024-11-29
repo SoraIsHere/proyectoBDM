@@ -28,12 +28,7 @@ if (isset($_SESSION['usuarioLoggeado'])) {
             $stmtCompletarLeccion->close();
 
             // Verificar si todas las lecciones del curso están completadas
-            $sqlVerificarLecciones = "
-                SELECT COUNT(*) as Incompletas
-                FROM UsuarioLeccion UL
-                INNER JOIN Leccion L ON UL.LeccionID = L.LeccionID
-                WHERE UL.UsuarioID = ? AND L.CursoID = ? AND UL.Leido = FALSE
-            ";
+            $sqlVerificarLecciones = "CALL VerificarLeccionesIncompletas(?, ?)";
             $stmtVerificarLecciones = $conexion->prepare($sqlVerificarLecciones);
             $stmtVerificarLecciones->bind_param('ii', $usuarioID, $cursoID);
             $stmtVerificarLecciones->execute();

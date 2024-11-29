@@ -19,8 +19,8 @@ if (isset($_SESSION['usuarioLoggeado'])) {
 
     if ($usuarioLoggeado->usuarioID == $usuarioID) {
         // Información del Usuario
-        $queryUsuario = "SELECT UsuarioID, Nombre, Apellido, Genero, FechaNacimiento, Email, TipoUsuario, FechaModificacion, BorradoLogico, FechaEliminacion FROM Usuario WHERE UsuarioID = ?";
-        if ($stmt = $conexion->prepare($queryUsuario)) {
+        $sqlUsuario = "CALL ObtenerInformacionUsuario(?)";
+        if ($stmt = $conexion->prepare($sqlUsuario)) {
             $stmt->bind_param('i', $usuarioID);
             $stmt->execute();
             $resultSet = $stmt->get_result();
@@ -32,12 +32,8 @@ if (isset($_SESSION['usuarioLoggeado'])) {
         }
 
         // Cursos en los que está inscrito el Usuario
-        $queryCursos = "SELECT C.CursoID, C.Nombre AS CursoNombre, C.CostoGeneral, C.Descripcion, C.Calificacion, C.CategoriaID, C.CreadorID, C.BorradoLogico, C.FechaCreacion, C.FechaEliminacion,
-                        UC.Terminado, UC.FechaFinalizacion, UC.FechaInscripcion, UC.UltimaVisitaDeLeccion, UC.FormaPago
-                        FROM UsuarioCurso UC
-                        JOIN Curso C ON UC.CursoID = C.CursoID
-                        WHERE UC.UsuarioID = ?";
-        if ($stmt = $conexion->prepare($queryCursos)) {
+        $sqlCursos = "CALL ObtenerCursosUsuario(?)";
+        if ($stmt = $conexion->prepare($sqlCursos)) {
             $stmt->bind_param('i', $usuarioID);
             $stmt->execute();
             $resultSet = $stmt->get_result();
@@ -49,12 +45,8 @@ if (isset($_SESSION['usuarioLoggeado'])) {
         }
 
         // Lecciones de los cursos en los que está inscrito el Usuario
-        $queryLecciones = "SELECT L.LeccionID, L.Nombre AS LeccionNombre, L.Costo, L.Orden, L.Descripcion, L.CursoID, L.BorradoLogico, L.FechaEliminacion,
-                           UL.Leido
-                           FROM UsuarioLeccion UL
-                           JOIN Leccion L ON UL.LeccionID = L.LeccionID
-                           WHERE UL.UsuarioID = ?";
-        if ($stmt = $conexion->prepare($queryLecciones)) {
+        $sqlLecciones = "CALL ObtenerLeccionesPorUsuario(?)";
+        if ($stmt = $conexion->prepare($sqlLecciones)) {
             $stmt->bind_param('i', $usuarioID);
             $stmt->execute();
             $resultSet = $stmt->get_result();

@@ -19,10 +19,14 @@ if ($cursoID > 0) {
     }
 
     // Llamar al procedimiento almacenado para obtener el curso por ID
-    $sqlSelectCurso = "CALL ObtenerCurso({$cursoID})";
-    if ($resultCurso = mysqli_query($conexion, $sqlSelectCurso)) {
+    $sqlSelectCurso = "CALL ObtenerCurso(?)";
+    $stmtSelectCurso = $conexion->prepare($sqlSelectCurso);
+    $stmtSelectCurso->bind_param('i', $cursoID);
+
+    if ($stmtSelectCurso->execute()) {
+        $resultCurso = $stmtSelectCurso->get_result();
         $curso = null;
-        if ($row = mysqli_fetch_assoc($resultCurso)) {
+        if ($row = $resultCurso->fetch_assoc()) {
             $curso = new Curso(
                 $row['CursoID'],
                 $row['Nombre'],
@@ -39,7 +43,8 @@ if ($cursoID > 0) {
                 $row['categoriaNombre']
             );
         }
-        mysqli_free_result($resultCurso);
+        $resultCurso->free();
+        $stmtSelectCurso->close();
 
         // Asegurar que el siguiente resultado está disponible
         mysqli_next_result($conexion);
@@ -48,7 +53,7 @@ if ($cursoID > 0) {
     }
 
     // Validar si el usuario está inscrito en el curso y si está terminado
-    $sqlCheckCurso = "SELECT * FROM UsuarioCurso WHERE UsuarioID = ? AND CursoID = ?";
+    $sqlCheckCurso = "CALL ValidarInscripcion(?, ?)";
     $stmtCheckCurso = $conexion->prepare($sqlCheckCurso);
     $stmtCheckCurso->bind_param('ii', $usuarioID, $cursoID);
     $cursoTerminado = false;
@@ -66,12 +71,15 @@ if ($cursoID > 0) {
     $stmtCheckCurso->close();
 
     // Llamar al procedimiento almacenado para obtener las lecciones del curso por ID
-    $sqlSelectLecciones = "CALL ObtenerLeccionesPorCurso({$cursoID})";
+    $sqlSelectLecciones = "CALL ObtenerLeccionesPorCurso(?)";
+    $stmtSelectLecciones = $conexion->prepare($sqlSelectLecciones);
+    $stmtSelectLecciones->bind_param('i', $cursoID);
     $lecciones = array();
     $leccionesUsuario = array();
 
-    if ($resultLecciones = mysqli_query($conexion, $sqlSelectLecciones)) {
-        while ($row = mysqli_fetch_assoc($resultLecciones)) {
+    if ($stmtSelectLecciones->execute()) {
+        $resultLecciones = $stmtSelectLecciones->get_result();
+        while ($row = $resultLecciones->fetch_assoc()) {
             $leccion = new Leccion(
                 $row['LeccionID'],
                 $row['Nombre'],
@@ -85,16 +93,17 @@ if ($cursoID > 0) {
             );
             $lecciones[] = $leccion;
         }
-        mysqli_free_result($resultLecciones);
+        $resultLecciones->free();
     } else {
         die('Error al obtener las lecciones: ' . mysqli_error($conexion));
     }
+    $stmtSelectLecciones->close();
 
     // Asegurar que el siguiente resultado está disponible
     mysqli_next_result($conexion);
 
     // Obtener las lecciones que el usuario ha comprado
-    $sqlSelectLeccionesUsuario = " SELECT UL.LeccionID, UL.Leido FROM UsuarioLeccion UL INNER JOIN Leccion L ON UL.LeccionID = L.LeccionID WHERE UL.UsuarioID = ? AND L.CursoID = ?";
+    $sqlSelectLeccionesUsuario = "CALL ObtenerLeccionesUsuario(?, ?)";
     $stmtLeccionesUsuario = $conexion->prepare($sqlSelectLeccionesUsuario);
     $stmtLeccionesUsuario->bind_param('ii', $usuarioID, $cursoID);
     if ($stmtLeccionesUsuario->execute()) {

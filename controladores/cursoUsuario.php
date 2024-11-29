@@ -40,7 +40,7 @@ if (isset($_SESSION['usuarioLoggeado'])) {
         }
 
         // Verificar si el usuario ya está inscrito en el curso
-        $sqlCheck = "SELECT * FROM UsuarioCurso WHERE UsuarioID = ? AND CursoID = ?";
+        $sqlCheck = "CALL VerificarUsuarioCurso(?, ?)";
         $stmtCheck = $conexion->prepare($sqlCheck);
         $stmtCheck->bind_param('ii', $usuarioID, $cursoID);
 
@@ -80,12 +80,7 @@ if (isset($_SESSION['usuarioLoggeado'])) {
 
         // Obtener las lecciones del curso actual asociadas al usuario
         $usuarioLecciones = [];
-        $sqlUsuarioLecciones = "
-            SELECT UL.*
-            FROM UsuarioLeccion UL
-            INNER JOIN Leccion L ON UL.LeccionID = L.LeccionID
-            WHERE UL.UsuarioID = ? AND L.CursoID = ?
-        ";
+        $sqlUsuarioLecciones = "CALL ObtenerUsuarioLecciones(?, ?)";
         $stmtUsuarioLecciones = $conexion->prepare($sqlUsuarioLecciones);
         $stmtUsuarioLecciones->bind_param('ii', $usuarioID, $cursoID);
 
@@ -100,7 +95,7 @@ if (isset($_SESSION['usuarioLoggeado'])) {
 
         // Insertar lecciones dependiendo de si el curso es completo o no
         if ($completo) {
-            $sqlLeccionesCurso = "SELECT LeccionID FROM Leccion WHERE CursoID = ?";
+            $sqlLeccionesCurso = "CALL ObtenerLeccionesPorCurso(?)";
             $stmtLeccionesCurso = $conexion->prepare($sqlLeccionesCurso);
             $stmtLeccionesCurso->bind_param('i', $cursoID);
 
@@ -145,6 +140,5 @@ if (isset($_SESSION['usuarioLoggeado'])) {
     echo "Error: Usuario no loggeado.";
     header("Location: /inisesion.php?error=usuario_no_loggeado");
     exit;
-
 }
 ?>

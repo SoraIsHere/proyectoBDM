@@ -685,6 +685,7 @@ WHERE
 ORDER BY 
     C.FechaCreacion DESC;
  DELIMITER $$
+ 
 CREATE PROCEDURE ObtenerComentariosPorCurso(
     IN p_CursoID INT
 )

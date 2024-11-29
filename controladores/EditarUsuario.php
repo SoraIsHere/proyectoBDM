@@ -32,11 +32,14 @@ $sqlUpdate = "CALL EditarUsuario (
 
 if (mysqli_query($conexion, $sqlUpdate)) {
     // Actualizar el objeto Usuario en la sesión
-    $query = "SELECT UsuarioID, Nombre, Apellido, Email, Genero, FechaNacimiento, Foto, TipoUsuario, FechaModificacion, BorradoLogico, FechaEliminacion FROM Usuario WHERE UsuarioID = '$usuarioID'";
-    $result = mysqli_query($conexion, $query);
+    $sqlSelectUsuario = "CALL ObtenerUsuarioPorID(?)";
+    $stmtSelectUsuario = $conexion->prepare($sqlSelectUsuario);
+    $stmtSelectUsuario->bind_param('i', $usuarioID);
+    $stmtSelectUsuario->execute();
+    $result = $stmtSelectUsuario->get_result();
 
-    if (mysqli_num_rows($result) == 1) {
-        $user = mysqli_fetch_assoc($result);
+    if ($result->num_rows == 1) {
+        $user = $result->fetch_assoc();
 
         // Inicializar el objeto Usuario actualizado
         $usuario = new Usuario(
@@ -56,6 +59,8 @@ if (mysqli_query($conexion, $sqlUpdate)) {
         // Almacenar el objeto Usuario en la sesión
         $_SESSION['usuarioLoggeado'] = serialize($usuario);
     }
+
+    $stmtSelectUsuario->close();
 
     header("Location: /kardex.php");
     exit;

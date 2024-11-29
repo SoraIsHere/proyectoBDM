@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
-<?php session_start();
+<?php
+session_start();
 include('conectarBD.php');
 include('modelos/Usuarios.php');
-include('modelos/Curso.php'); // Verifica si el usuario está loggeado 
+include('modelos/Curso.php');
+
+// Verifica si el usuario está loggeado 
 if (!isset($_SESSION['usuarioLoggeado'])) {
     header("Location: /inisesion.php?error=usuario_no_loggeado");
     exit;
@@ -11,18 +14,21 @@ if (!isset($_SESSION['usuarioLoggeado'])) {
 $usuarioLoggeado = unserialize($_SESSION['usuarioLoggeado']);
 $usuarioID = $usuarioLoggeado->usuarioID;
 $cursoID = isset($_GET['cursoId']) ? intval($_GET['cursoId']) : 0;
+
 if ($cursoID > 0) {
     // Conectar a la base de datos 
     $database = new db();
     $conexion = $database->conectarBD();
+
     // Verificar si el curso está completado por el usuario
-    $sqlVerificarCurso = "SELECT Terminado, FechaFinalizacion FROM UsuarioCurso WHERE UsuarioID = ? AND CursoID = ? AND Terminado = TRUE";
+    $sqlVerificarCurso = "CALL VerificarCursoCompletado(?, ?)";
     $stmtVerificarCurso = $conexion->prepare($sqlVerificarCurso);
     $stmtVerificarCurso->bind_param('ii', $usuarioID, $cursoID);
     $stmtVerificarCurso->execute();
     $resultVerificarCurso = $stmtVerificarCurso->get_result();
     $cursoCompletado = $resultVerificarCurso->fetch_assoc();
     $stmtVerificarCurso->close();
+
     if ($cursoCompletado) {
         // Obtener los detalles del curso 
         $sqlObtenerCurso = "CALL ObtenerCurso(?)";
@@ -33,8 +39,8 @@ if ($cursoID > 0) {
         $curso = $resultObtenerCurso->fetch_assoc();
         $stmtObtenerCurso->close();
 
-        //creador
-        $sqlObtenerCreador = "SELECT Nombre, Apellido FROM Usuario WHERE UsuarioID = ?";
+        // Obtener los detalles del creador del curso
+        $sqlObtenerCreador = "CALL ObtenerCreador(?)";
         $stmtObtenerCreador = $conexion->prepare($sqlObtenerCreador);
         $stmtObtenerCreador->bind_param('i', $curso['CreadorID']);
         $stmtObtenerCreador->execute();
@@ -137,7 +143,8 @@ if ($cursoID > 0) {
         <div class="diploma" id="diploma">
             <h1>Diploma de Curso</h1>
             <p>Este diploma certifica que</p>
-            <p class="nombre"><?php echo htmlspecialchars($usuarioLoggeado->nombre. " ". $usuarioLoggeado->apellido); ?></p>
+            <p class="nombre"><?php echo htmlspecialchars($usuarioLoggeado->nombre . " " . $usuarioLoggeado->apellido); ?>
+            </p>
             <p>ha completado satisfactoriamente el curso de</p>
             <p class="nombre"><?php echo htmlspecialchars($curso['Nombre']); ?></p>
             <p>el día</p>
