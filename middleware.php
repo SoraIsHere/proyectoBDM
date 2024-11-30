@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once 'modelos/Usuarios.php';
-function authMiddleware()
+function authMiddleware() //este alomejor no cuenta xD
 {
     if (!isset($_SESSION['usuarioLoggeado'])) {
         echo json_encode(['status' => 'error', 'message' => 'Usuario no loggeado']);
@@ -9,6 +9,7 @@ function authMiddleware()
     }
 }
 
+//estos si cuentan deseguro! 
 function alumnoMiddleware()
 {
     if (!isset($_SESSION['usuarioLoggeado'])) {
