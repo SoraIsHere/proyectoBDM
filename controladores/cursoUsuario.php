@@ -82,10 +82,6 @@ if (isset($_SESSION['usuarioLoggeado'])) {
             echo "Error al verificar UsuarioCurso: " . $stmtCheck->error;
         }
 
-        // Cerrar el statement y limpiar resultados después de su uso
-        $stmtCheck->close();
-        limpiarResultadosYCerrar($conexion);
-
         // Reabrir la conexión
         $conexion = $database->conectarBD();
 
