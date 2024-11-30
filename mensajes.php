@@ -1,3 +1,6 @@
+<?php include 'middleware.php'; ?>
+<?php chatMiddleware(); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -11,10 +14,8 @@
 </head>
 
 <?php include("header.php") ?>
-
 <?php
 include('conectarBD.php');
-
 // Verificar si el usuario está loggeado
 if (!isset($_SESSION['usuarioLoggeado'])) {
     header("Location: iniciosesion.php");
@@ -45,6 +46,42 @@ while ($row = mysqli_fetch_assoc($result)) {
 $stmt->close();
 mysqli_close($conexion);
 ?>
+<style>
+    .mensaje {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    .mensaje img.foto-mensaje {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+
+    .mensaje.actual {
+        justify-content: flex-end;
+    }
+
+    .mensaje.receptor {
+        justify-content: flex-start;
+    }
+
+    .texto-mensaje {
+        max-width: 70%;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #f1f1f1;
+        display: inline-block;
+        background: black;
+    }
+
+    .fechaMensaje {
+        font-size: 10px;
+    }
+</style>
 
 <body>
     <main style="padding: 100px 0 30px">
@@ -94,13 +131,32 @@ mysqli_close($conexion);
                     try {
                         var jsonResponse = JSON.parse(response);
                         if (jsonResponse.status === 'success') {
+                            // Obtener las imágenes
+                            var fotoActual = $("#navbar-foto-usuario").attr("src"); // Imagen del usuario actual
+                            var fotoOtro = $(".usuario.selected img").attr("src"); // Imagen del receptor seleccionado
+
+                            // Construir mensajes
                             var usuarioActualID = document.querySelector(".entrada-mensaje").getAttribute("user-id");
                             var nombreOtro = document.querySelector(".mensajes").getAttribute("data-name");
                             var mensajesHTML = '';
+
                             jsonResponse.mensajes.forEach(function (mensaje) {
-                                var emisor = (mensaje.EmisorID == usuarioActualID) ? 'Tú' : nombreOtro;
-                                mensajesHTML += '<div class="mensaje">' + emisor + ': ' + mensaje.Texto + '</div>';
+                                console.log(mensaje)
+                                var esActual = mensaje.EmisorID == usuarioActualID; // Verifica si el mensaje es del usuario actual
+                                var emisor = esActual ? 'Tú' : nombreOtro;
+                                var fotoEmisor = esActual ? fotoActual : fotoOtro;
+
+                                mensajesHTML += `
+                            <div class="mensaje ${esActual ? 'actual' : 'receptor'}">
+                                <img src="${fotoEmisor}" alt="${emisor}" class="foto-mensaje">
+                                <div class="texto-mensaje">
+                                    <strong>${emisor}:</strong> ${mensaje.Texto}
+                                    <p class="fechaMensaje m-0">${mensaje.FechaEnvio}</p>
+                                </div>
+                            </div>`;
                             });
+
+                            // Insertar mensajes en la ventana
                             document.querySelector(".mensajes").innerHTML = mensajesHTML;
                             document.querySelector(".mensajes").scrollTop = document.querySelector(".mensajes").scrollHeight;
                         } else {

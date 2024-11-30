@@ -1,9 +1,14 @@
+<?php include 'middleware.php'; ?>
+<?php alumnoMiddleware(); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Solo inicia la sesión si aún no está iniciada
+}
 include('conectarBD.php');
-include('modelos/Usuarios.php');
+include_once 'modelos/Usuarios.php';
 include('modelos/Curso.php');
 
 // Verifica si el usuario está loggeado 
@@ -143,7 +148,8 @@ if ($cursoID > 0) {
         <div class="diploma" id="diploma">
             <h1>Diploma de Curso</h1>
             <p>Este diploma certifica que</p>
-            <p class="nombre"><?php echo htmlspecialchars($usuarioLoggeado->nombre . " " . $usuarioLoggeado->apellido); ?>
+            <p class="nombre">
+                <?php echo htmlspecialchars($usuarioLoggeado->nombre . " " . $usuarioLoggeado->apellido); ?>
             </p>
             <p>ha completado satisfactoriamente el curso de</p>
             <p class="nombre"><?php echo htmlspecialchars($curso['Nombre']); ?></p>

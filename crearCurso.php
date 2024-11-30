@@ -1,3 +1,6 @@
+<?php include 'middleware.php'; ?>
+<?php instructorMiddleware(); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -81,39 +84,39 @@ mysqli_close($conexion);
 </body>
 
 <script>
-            document.getElementById("formulario-curso").onsubmit = function() {
-                var nombre = document.getElementById("nombre-curso").value.trim();
-                var descripcion = document.getElementById("descripcion").value.trim();
-                var imagen = document.getElementById("imagen").value.trim();
-                var precio = document.getElementById("precio").value.trim();
-                var categoria = document.getElementById("categoria").value.trim();
-                // var nombre = document.getElementById("nombre-curso").value.trim();
-                // var nombre = document.getElementById("nombre-curso").value.trim();
-                // var nombre = document.getElementById("nombre-curso").value.trim();
-                // var nombre = document.getElementById("nombre-curso").value.trim();
+    document.getElementById("formulario-curso").onsubmit = function () {
+        var nombre = document.getElementById("nombre-curso").value.trim();
+        var descripcion = document.getElementById("descripcion").value.trim();
+        var imagen = document.getElementById("imagen").value.trim();
+        var precio = document.getElementById("precio").value.trim();
+        var categoria = document.getElementById("categoria").value.trim();
+        // var nombre = document.getElementById("nombre-curso").value.trim();
+        // var nombre = document.getElementById("nombre-curso").value.trim();
+        // var nombre = document.getElementById("nombre-curso").value.trim();
+        // var nombre = document.getElementById("nombre-curso").value.trim();
 
-                if (nombre === ""){
-                    alert("El campo de nombre de curso no debe estar vacío");
-                    return false;
-                }
-                
-                if (descripcion === ""){
-                    alert("El campo de descripcion no debe estar vacío");
-                    return false;
-                }
-                if (imagen === ""){
-                    alert("Seleccione una imagen de portada");
-                    return false;
-                }
-                if (precio === ""){
-                    alert("El campo de precio no debe estar vacío");
-                    return false;
-                }
-                if (categoria === ""){
-                    alert("Seleccione una categoría");
-                    return false;
-                }
-            }
+        if (nombre === "") {
+            alert("El campo de nombre de curso no debe estar vacío");
+            return false;
+        }
+
+        if (descripcion === "") {
+            alert("El campo de descripcion no debe estar vacío");
+            return false;
+        }
+        if (imagen === "") {
+            alert("Seleccione una imagen de portada");
+            return false;
+        }
+        if (precio === "") {
+            alert("El campo de precio no debe estar vacío");
+            return false;
+        }
+        if (categoria === "") {
+            alert("Seleccione una categoría");
+            return false;
+        }
+    }
 
 </script>
 

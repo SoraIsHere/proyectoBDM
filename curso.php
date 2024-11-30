@@ -1,3 +1,6 @@
+<?php include 'middleware.php'; ?>
+<?php authMiddleware(); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 

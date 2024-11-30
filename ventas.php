@@ -1,3 +1,6 @@
+<?php include 'middleware.php'; ?>
+<?php instructorMiddleware(); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -105,7 +108,7 @@ mysqli_close($conexion);
                     <a href="./crearCurso.php" class="color-btn mt-4 d-block"
                         style="text-align:center; width:fit-content">Nuevo Curso</a>
 
-                        <a href="./misCursos.php" class="color-btn mt-4 d-block"
+                    <a href="./misCursos.php" class="color-btn mt-4 d-block"
                         style="text-align:center; width:fit-content">Mis Cursos</a>
 
                 </div>

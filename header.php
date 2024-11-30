@@ -1,6 +1,8 @@
 <?php
-session_start();
-include 'modelos/Usuarios.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Solo inicia la sesión si aún no está iniciada
+}
+include_once 'modelos/Usuarios.php';
 
 $usuarioLoggeado = false;
 if (isset($_SESSION['usuarioLoggeado'])) {
@@ -42,7 +44,7 @@ if (isset($_SESSION['usuarioLoggeado'])) {
             } ?>
             <div class="icon-menu">
                 <?php if ($usuarioLoggeado) {
-                    echo '<img src="' . $fotoUrl . '" alt="Foto del Usuario" class="logo-footer" style="height: 50px; width:50px; aspect-ratio: 1; margin: 0px;object-fit:cover">';
+                    echo '<img id="navbar-foto-usuario"  src="' . $fotoUrl . '" alt="Foto del Usuario" class="logo-footer" style="height: 50px; width:50px; aspect-ratio: 1; margin: 0px;object-fit:cover">';
                     ?>
                     <div class="menu-flotante">
                         <a href="./kardex.php">

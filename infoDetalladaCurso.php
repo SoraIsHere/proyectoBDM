@@ -1,3 +1,6 @@
+<?php include 'middleware.php'; ?>
+<?php instructorMiddleware(); ?>
+
 <?php include("header.php"); ?>
 <?php include("conectarBD.php"); ?>
 

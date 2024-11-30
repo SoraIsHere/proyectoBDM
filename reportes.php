@@ -1,3 +1,6 @@
+<?php include 'middleware.php'; ?>
+<?php adminMiddleware(); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
