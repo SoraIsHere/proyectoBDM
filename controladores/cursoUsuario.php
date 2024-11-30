@@ -3,8 +3,8 @@ session_start();
 include('../conectarBD.php');
 include('../modelos/Usuarios.php');
 
-// Función para limpiar resultados pendientes
-function limpiarResultados($conexion)
+// Función para limpiar resultados pendientes y cerrar la conexión
+function limpiarResultadosYCerrar($conexion)
 {
     while ($conexion->more_results()) {
         $conexion->next_result();
@@ -12,6 +12,7 @@ function limpiarResultados($conexion)
             $result->free();
         }
     }
+    mysqli_close($conexion);
 }
 
 // Verifica si el usuario está loggeado y obtiene el usuarioID de la sesión
@@ -21,9 +22,6 @@ if (isset($_SESSION['usuarioLoggeado'])) {
 
     // Verifica si la solicitud es POST
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Conectar a la base de datos
-        $database = new db();
-        $conexion = $database->conectarBD();
 
         // Obtener los datos del formulario
         $cursoID = intval($_POST['cursoID']);
@@ -39,6 +37,10 @@ if (isset($_SESSION['usuarioLoggeado'])) {
             exit;
         }
 
+        // Conectar a la base de datos
+        $database = new db();
+        $conexion = $database->conectarBD();
+
         // Verificar si el usuario ya está inscrito en el curso
         $sqlCheck = "CALL VerificarUsuarioCurso(?, ?)";
         $stmtCheck = $conexion->prepare($sqlCheck);
@@ -52,11 +54,17 @@ if (isset($_SESSION['usuarioLoggeado'])) {
                 $_SESSION['terminado'] = $row['Terminado'];
                 echo "El usuario ya está inscrito en este curso.";
             } else {
+                // Cerrar el statement antes de realizar cualquier otra operación
+                $stmtCheck->close();
+                limpiarResultadosYCerrar($conexion);
+
+                // Reabrir la conexión
+                $conexion = $database->conectarBD();
+
                 // Insertar en UsuarioCurso
                 $sqlInsert = "CALL InsertarUsuarioCurso(?, ?, ?, ?)";
                 $stmtInsert = $conexion->prepare($sqlInsert);
                 $terminado = 0;
-
                 $stmtInsert->bind_param('iiss', $usuarioID, $cursoID, $terminado, $formaPago);
 
                 if ($stmtInsert->execute()) {
@@ -68,15 +76,18 @@ if (isset($_SESSION['usuarioLoggeado'])) {
                 }
 
                 $stmtInsert->close();
+                limpiarResultadosYCerrar($conexion);
             }
-
-            $resultCheck->free();
-            $stmtCheck->close();
         } else {
             echo "Error al verificar UsuarioCurso: " . $stmtCheck->error;
         }
 
-        limpiarResultados($conexion);
+        // Cerrar el statement y limpiar resultados después de su uso
+        $stmtCheck->close();
+        limpiarResultadosYCerrar($conexion);
+
+        // Reabrir la conexión
+        $conexion = $database->conectarBD();
 
         // Obtener las lecciones del curso actual asociadas al usuario
         $usuarioLecciones = [];
@@ -90,11 +101,16 @@ if (isset($_SESSION['usuarioLoggeado'])) {
                 $usuarioLecciones[] = $row['LeccionID'];
             }
             $resultUsuarioLecciones->free();
-            $stmtUsuarioLecciones->close();
         }
+
+        $stmtUsuarioLecciones->close();
+        limpiarResultadosYCerrar($conexion);
 
         // Insertar lecciones dependiendo de si el curso es completo o no
         if ($completo) {
+            // Reabrir la conexión
+            $conexion = $database->conectarBD();
+
             $sqlLeccionesCurso = "CALL ObtenerLeccionesPorCurso(?)";
             $stmtLeccionesCurso = $conexion->prepare($sqlLeccionesCurso);
             $stmtLeccionesCurso->bind_param('i', $cursoID);
@@ -104,34 +120,38 @@ if (isset($_SESSION['usuarioLoggeado'])) {
                 while ($row = $resultLeccionesCurso->fetch_assoc()) {
                     $leccionID = $row['LeccionID'];
                     if (!in_array($leccionID, $usuarioLecciones)) {
+                        // Cerrar y reabrir la conexión para cada inserción
+                        limpiarResultadosYCerrar($conexion);
+                        $conexion = $database->conectarBD();
+
                         $sqlInsertLeccion = "CALL InsertarUsuarioLeccion(?, ?, ?)";
                         $stmtInsertLeccion = $conexion->prepare($sqlInsertLeccion);
                         $leido = 0;
                         $stmtInsertLeccion->bind_param('iii', $usuarioID, $leccionID, $leido);
                         $stmtInsertLeccion->execute();
-                        limpiarResultados($conexion);
                         $stmtInsertLeccion->close();
-                        echo "Lección {$leccionID} registrada exitosamente.";
                     }
                 }
                 $resultLeccionesCurso->free();
             }
-            limpiarResultados($conexion);
             $stmtLeccionesCurso->close();
+            limpiarResultadosYCerrar($conexion);
         } else {
             if (!in_array($leccionID, $usuarioLecciones)) {
+                // Reabrir la conexión para inserción individual
+                $conexion = $database->conectarBD();
+
                 $sqlInsertLeccion = "CALL InsertarUsuarioLeccion(?, ?, ?)";
                 $stmtInsertLeccion = $conexion->prepare($sqlInsertLeccion);
                 $leido = 0;
                 $stmtInsertLeccion->bind_param('iii', $usuarioID, $leccionID, $leido);
                 $stmtInsertLeccion->execute();
-                limpiarResultados($conexion);
                 $stmtInsertLeccion->close();
+                limpiarResultadosYCerrar($conexion);
                 echo "Lección {$leccionID} registrada exitosamente.";
             }
         }
 
-        mysqli_close($conexion);
         header("Location: /curso.php?id={$cursoID}");
         exit;
 

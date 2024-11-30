@@ -66,7 +66,7 @@ CREATE PROCEDURE ObtenerUsuarioLecciones(
     IN p_CursoID INT
 )
 BEGIN
-    SELECT UL.UsuarioID, UL.Leccion, UL.Leido
+    SELECT UL.UsuarioID, UL.LeccionID, UL.Leido
     FROM UsuarioLeccion UL
     INNER JOIN Leccion L ON UL.LeccionID = L.LeccionID
     WHERE UL.UsuarioID = p_UsuarioID AND L.CursoID = p_CursoID;
