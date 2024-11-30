@@ -4,7 +4,7 @@ CREATE PROCEDURE ValidarInscripcion(
     IN p_CursoID INT
 )
 BEGIN
-    SELECT *
+    SELECT usuarioID, cursoID, Terminado, FechaFinalizacion, FechaInscripcion, UltimaVisitaDeLeccion, FormaPago
     FROM UsuarioCurso
     WHERE UsuarioID = p_UsuarioID AND CursoID = p_CursoID;
 END$$
@@ -55,7 +55,7 @@ CREATE PROCEDURE VerificarUsuarioCurso(
     IN p_CursoID INT
 )
 BEGIN
-    SELECT *
+     SELECT usuarioID, cursoID, Terminado, FechaFinalizacion, FechaInscripcion, UltimaVisitaDeLeccion, FormaPago
     FROM UsuarioCurso
     WHERE UsuarioID = p_UsuarioID AND CursoID = p_CursoID;
 END$$
@@ -66,7 +66,7 @@ CREATE PROCEDURE ObtenerUsuarioLecciones(
     IN p_CursoID INT
 )
 BEGIN
-    SELECT UL.*
+    SELECT UL.UsuarioID, UL.Leccion, UL.Leido
     FROM UsuarioLeccion UL
     INNER JOIN Leccion L ON UL.LeccionID = L.LeccionID
     WHERE UL.UsuarioID = p_UsuarioID AND L.CursoID = p_CursoID;

@@ -16,8 +16,6 @@ CREATE TABLE Usuario (
     FechaEliminacion TIMESTAMP NULL DEFAULT NULL
 );
 
-select * from Usuario;
-
 CREATE TABLE Categoria (
     CategoriaID INT PRIMARY KEY AUTO_INCREMENT,
     Nombre VARCHAR(100) NOT NULL,
