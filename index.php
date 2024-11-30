@@ -26,6 +26,8 @@ mysqli_close($conexion);
 ?>
 
 <?php include("controladores/CursosValorados.php");
+include("controladores/CursosVendidos.php");
+include("controladores/CursosRecientes.php");
 ?>
 
 <body>
@@ -83,6 +85,55 @@ mysqli_close($conexion);
                 </div>
                 <div class="text-center d-flex justify-content-center">
                     <a href="/busquedas.php" class="transparent-btn mt-4">Ver todos</a>
+                </div>
+
+
+                <h3 class="mb-4">Mas Recientes</h3>
+                <div class="card-grid mb-5">
+                    <?php
+                    foreach ($cursosRecientes as $curso) {
+                        ?>
+                        <div class="card">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($curso->imagen); ?>"
+                                alt="<?php echo htmlspecialchars($curso->nombre); ?>">
+
+                            <h3><?php echo $curso->nombre ?></h3>
+                            <p class="text-green fw-bold">Calificacion: <?php echo $curso->calificacion ?>/5</p>
+                            <p><?php echo $curso->descripcion ?></p>
+                            <a href="/detalleCurso.php?id=<?php echo $curso->cursoID ?>"
+                                class="course-link fw-bold text-white">Ver más</a>
+                            <div class="mt-3">
+                                <a <?php echo !$curso->categoriaBorrada ? "href=/busquedas.php?cat=" . $curso->categoriaID : "" ?>><?php echo !$curso->categoriaBorrada ? $curso->categoriaNombre : "Sin categoria" ?></a>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    <!-- Más cursos -->
+                </div>
+
+                <h3 class="mb-4">Mas Vendidos</h3>
+                <div class="card-grid">
+                    <?php
+                    foreach ($cursosVendidos as $curso) {
+                        ?>
+                        <div class="card">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($curso->imagen); ?>"
+                                alt="<?php echo htmlspecialchars($curso->nombre); ?>">
+
+                            <h3><?php echo $curso->nombre ?></h3>
+                            <p class="text-green fw-bold">Calificacion: <?php echo $curso->calificacion ?>/5</p>
+                            <p><?php echo $curso->descripcion ?></p>
+                            <a href="/detalleCurso.php?id=<?php echo $curso->cursoID ?>"
+                                class="course-link fw-bold text-white">Ver más</a>
+                            <div class="mt-3">
+                                <a <?php echo !$curso->categoriaBorrada ? "href=/busquedas.php?cat=" . $curso->categoriaID : "" ?>><?php echo !$curso->categoriaBorrada ? $curso->categoriaNombre : "Sin categoria" ?></a>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    <!-- Más cursos -->
                 </div>
             </div>
         </section>
