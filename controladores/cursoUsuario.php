@@ -120,10 +120,10 @@ if (isset($_SESSION['usuarioLoggeado'])) {
                         limpiarResultadosYCerrar($conexion);
                         $conexion = $database->conectarBD();
 
-                        $sqlInsertLeccion = "CALL InsertarUsuarioLeccion(?, ?, ?)";
+                        $sqlInsertLeccion = "CALL InsertarUsuarioLeccion(?, ?, ?, ?)";
                         $stmtInsertLeccion = $conexion->prepare($sqlInsertLeccion);
                         $leido = 0;
-                        $stmtInsertLeccion->bind_param('iii', $usuarioID, $leccionID, $leido);
+                        $stmtInsertLeccion->bind_param('iiis', $usuarioID, $leccionID, $leido, $datosCompra);
                         $stmtInsertLeccion->execute();
                         $stmtInsertLeccion->close();
                     }
@@ -137,10 +137,10 @@ if (isset($_SESSION['usuarioLoggeado'])) {
                 // Reabrir la conexión para inserción individual
                 $conexion = $database->conectarBD();
 
-                $sqlInsertLeccion = "CALL InsertarUsuarioLeccion(?, ?, ?)";
+                $sqlInsertLeccion = "CALL InsertarUsuarioLeccion(?, ?, ?, ?)";
                 $stmtInsertLeccion = $conexion->prepare($sqlInsertLeccion);
                 $leido = 0;
-                $stmtInsertLeccion->bind_param('iii', $usuarioID, $leccionID, $leido);
+                $stmtInsertLeccion->bind_param('iiis', $usuarioID, $leccionID, $leido, $datosCompra);
                 $stmtInsertLeccion->execute();
                 $stmtInsertLeccion->close();
                 limpiarResultadosYCerrar($conexion);

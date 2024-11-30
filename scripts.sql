@@ -99,6 +99,7 @@ CREATE TABLE UsuarioLeccion (
     UsuarioID INT NOT NULL,
     LeccionID INT NOT NULL,
     Leido BOOLEAN DEFAULT FALSE NOT NULL,
+    detalle varchar(200) null,
     PRIMARY KEY (UsuarioID, LeccionID),
     FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
     FOREIGN KEY (LeccionID) REFERENCES Leccion(LeccionID)
@@ -201,16 +202,18 @@ BEGIN
 END$$
 
 DELIMITER $$
-
 CREATE PROCEDURE InsertarUsuarioLeccion(
     IN p_UsuarioID INT,
     IN p_LeccionID INT,
-    IN p_Leido BOOLEAN
+    IN p_Leido BOOLEAN,
+    IN p_datos VARCHAR(200)
 )
 BEGIN
-    INSERT INTO UsuarioLeccion (UsuarioID, LeccionID, Leido)
-    VALUES (p_UsuarioID, p_LeccionID, p_Leido);
+    INSERT INTO UsuarioLeccion (UsuarioID, LeccionID, Leido, detalle)
+    VALUES (p_UsuarioID, p_LeccionID, p_Leido, IF(p_datos IS NULL, "", p_datos));
 END$$
+DELIMITER ;
+
 
 
 /*edicion*/

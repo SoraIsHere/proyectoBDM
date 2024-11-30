@@ -18,12 +18,19 @@ $conexion = $database->conectarBD();
 
 include("controladores/ObtenerCurso.php"); ?>
 
+
+<!-- Initialize the JS-SDK -->
+<script
+    src="https://www.paypal.com/sdk/js?client-id=ASSKtoTPhEkdDT5eQLUGlYmZkiOE0oN2_tAXMqIvRnzGx3GMtW-fIoW7oW-UiENI_RkzLX-GCpH4bUDo&currency=MXN&disable-funding=paylater"
+    data-sdk-integration-source="developer-studio"></script>
+
+
 <body>
     <main>
         <header class="curso-hero">
             <img src="data:image/jpeg;base64,<?php echo base64_encode($curso->imagen); ?>"
-                                            alt="<?php echo htmlspecialchars($curso->nombre); ?>"
-                                         style="max-height: 400px; width: 600px; object-fit: cover; object-position: top;">
+                alt="<?php echo htmlspecialchars($curso->nombre); ?>"
+                style="max-height: 400px; width: 600px; object-fit: cover; object-position: top;">
             <div class="hero-content">
                 <h1 class="mt-4">
                     <?php echo $curso->nombre ?>
@@ -67,7 +74,7 @@ include("controladores/ObtenerCurso.php"); ?>
                                 }
                                 ?>
                                 <tr>
-                                    <td style="width: 33%;"><a href="#javascript-react">
+                                    <td style="width: 33%;"><a>
                                             <?php echo $leccion->nombre ?></a></td>
                                     <td style="width: 33%;">
                                         <?php if ($usuarioLoggeado) { ?>
@@ -102,22 +109,20 @@ include("controladores/ObtenerCurso.php"); ?>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <form class="purchaseForm" method="post"
-                                                                        action="/controladores/cursoUsuario.php">
+                                                                        action="/controladores/cursoUsuario.php"
+                                                                        id="cursoForm-<?php echo $leccion->leccionID ?>">
                                                                         <div class="mb-3">
                                                                             <label for="paymentMethod" class="form-label">Método de
                                                                                 Pago</label>
-                                                                            <select class="form-select" name="paymentMethod"
+                                                                            <select class="form-select d-none" name="paymentMethod"
                                                                                 id="paymentMethod" required>
-                                                                                <option value="">Selecciona una opción</option>
-                                                                                <option value="tarjeta">Tarjeta</option>
-                                                                                <option value="paypal">PayPal</option>
+                                                                                <option value="paypal" selected>PayPal</option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="mb-3">
-                                                                            <label for="purchaseDetails" class="form-label">Datos de
-                                                                                Compra</label>
-                                                                            <input type="text" name="purchaseDetails"
-                                                                                class="form-control" id="purchaseDetails"
+                                                                            <input type="hidden" name="purchaseDetails"
+                                                                                class="form-control"
+                                                                                id="purchaseDetails-<?php echo $leccion->leccionID ?>"
                                                                                 placeholder="Ej. Número de tarjeta, correo de PayPal"
                                                                                 required>
                                                                             <input type="hidden" name="leccionID"
@@ -128,9 +133,41 @@ include("controladores/ObtenerCurso.php"); ?>
                                                                             <input type="hidden" name="userID"
                                                                                 value="<?php echo $usuarioID = $usuarioLoggeado->usuarioID; ?>">
                                                                         </div>
-                                                                        <button type="submit" class="btn color-btn">
+                                                                        <button type="submit" class="btn color-btn d-none">
                                                                             Comprar $<?php echo $leccion->costo ?>
                                                                         </button>
+                                                                        <div
+                                                                            id="paypal-button-container-<?php echo $leccion->leccionID ?>">
+                                                                        </div>
+                                                                        <p id="result-message"></p>
+                                                                        <script>
+                                                                            paypal.Buttons({
+                                                                                style: {
+                                                                                    color: 'blue',
+                                                                                    shape: 'pill'
+                                                                                },
+                                                                                createOrder: function (data, actions) {
+                                                                                    return actions.order.create({
+                                                                                        purchase_units: [{
+                                                                                            amount: {
+                                                                                                value: <?php echo $leccion->costo ?>
+                                                                                            }
+                                                                                        }]
+                                                                                    });
+                                                                                },
+                                                                                onApprove: function (data, actions) {
+                                                                                    actions.order.capture().then(function (detalles) {
+                                                                                        alert('Compra completada');
+                                                                                        document.querySelector("#purchaseDetails-<?php echo $leccion->leccionID ?>").value = detalles.id;
+                                                                                        document.getElementById('cursoForm-<?php echo $leccion->leccionID ?>').submit();
+                                                                                    });
+                                                                                },
+                                                                                onCancel: function (data) {
+                                                                                    alert("Pago cancelado");
+                                                                                    console.log(data);
+                                                                                }
+                                                                            }).render('#paypal-button-container-<?php echo $leccion->leccionID ?>');
+                                                                        </script>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -173,22 +210,18 @@ include("controladores/ObtenerCurso.php"); ?>
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form class="purchaseForm" method="post"
+                                                <form id="cursoForm" class="purchaseForm" method="post"
                                                     action="/controladores/cursoUsuario.php">
                                                     <div class="mb-3">
                                                         <label for="paymentMethod" class="form-label">Método de
                                                             Pago</label>
-                                                        <select class="form-select" name="paymentMethod" id="paymentMethod"
-                                                            required>
-                                                            <option value="">Selecciona una opción</option>
-                                                            <option value="tarjeta">Tarjeta</option>
-                                                            <option value="paypal">PayPal</option>
+                                                        <select class="form-select d-none" name="paymentMethod"
+                                                            id="paymentMethod" required>
+                                                            <option selected value="tarjeta">Tarjeta</option>
                                                         </select>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <label for="purchaseDetails" class="form-label">Datos de
-                                                            Compra</label>
-                                                        <input type="text" name="purchaseDetails" class="form-control"
+                                                    <div class="mb-3 ">
+                                                        <input type="hidden" name="purchaseDetails" class="form-control"
                                                             id="purchaseDetails"
                                                             placeholder="Ej. Número de tarjeta, correo de PayPal" required>
                                                         <input type="hidden" name="cursoID" value="<?php echo $cursoID ?>">
@@ -197,17 +230,20 @@ include("controladores/ObtenerCurso.php"); ?>
                                                             value="<?php echo $usuarioID = $usuarioLoggeado->usuarioID; ?>">
 
                                                     </div>
-                                                    <button type="submit" class="btn color-btn">Comprar
+                                                    <button type="submit" class="btn color-btn d-none">Comprar
                                                         $<?php echo $curso->costoGeneral ?>
                                                     </button>
+
+                                                    <div id="paypal-button-container"></div>
+                                                    <p id="result-message"></p>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <?php if ($cursoTerminado) { ?>
-                                    <a type="button" href="/diploma.php?cursoId=<?php echo $cursoID ?>" data-curso="<?php $cursoID ?>"
-                                        class="mt-4 color-btn" style="display:block">Curso
+                                    <a type="button" href="/diploma.php?cursoId=<?php echo $cursoID ?>"
+                                        data-curso="<?php $cursoID ?>" class="mt-4 color-btn" style="display:block">Curso
                                         completado!</a>
                                 <?php } ?>
                             <?php }
@@ -295,8 +331,39 @@ include("controladores/ObtenerCurso.php"); ?>
             });
         });
     });
+
 </script>
 
+
+<script>
+    paypal.Buttons({
+        style: {
+            color: 'blue',
+            shape: 'pill'
+        },
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: <?php echo $curso->costoGeneral ?>
+                    }
+                }]
+            });
+        },
+        onApprove: function (data, actions) {
+            actions.order.capture().then(function (detalles) {
+                alert('Compra completada');
+                console.log(detalles);
+                document.querySelector("#purchaseDetails").value = detalles.id;
+                document.getElementById('cursoForm').submit();
+            });
+        },
+        onCancel: function (data) {
+            alert("Pago cancelado");
+            console.log(data);
+        }
+    }).render('#paypal-button-container');
+</script>
 <?php include("footer.php") ?>
 
 </html>
