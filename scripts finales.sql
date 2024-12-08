@@ -183,3 +183,20 @@ BEGIN
     WHERE LeccionID = p_LeccionID;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE FUNCTION ObtenerPromedioCalificacionCurso(
+    p_CursoID INT
+) RETURNS DECIMAL(5,2)
+BEGIN
+    DECLARE promedio DECIMAL(5,2);
+
+    SELECT AVG(Calificacion)
+    INTO promedio
+    FROM Comentario
+    WHERE CursoID = p_CursoID
+    AND BorradoLogico = FALSE;
+
+    RETURN COALESCE(promedio, 0);
+END$$
+DELIMITER ;
