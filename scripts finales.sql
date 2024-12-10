@@ -200,3 +200,23 @@ BEGIN
     RETURN COALESCE(promedio, 0);
 END$$
 DELIMITER ;
+
+
+
+DELIMITER //
+
+CREATE FUNCTION contar_estudiantes(cursoID INT,usuarioID INT )
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE total INT;
+
+   
+    SELECT COUNT(*) INTO total
+    FROM UsuarioCurso
+    WHERE UsuarioID = usuarioID AND CursoID = cursoID;
+
+    RETURN total;
+END //
+
+DELIMITER ;
