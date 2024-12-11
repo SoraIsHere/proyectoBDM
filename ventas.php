@@ -1,6 +1,3 @@
-<?php include 'middleware.php'; ?>
-<?php instructorMiddleware(); ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -59,6 +56,14 @@ while ($row = $resultReporteVentas->fetch_assoc()) {
 $stmtReporteVentas->close();
 mysqli_next_result($conexion);
 
+
+$sqlAlumnosInscritos = "CALL SELECT contar_estudiantes(?, ?) AS total_estudiantes;";
+$stmtTotalAlumnosInscritos = $conexion->prepare($sqlAlumnosInscritos);
+$stmtAlumnosInscritos->bind_param('issii', $usuarioID, $cursoID);
+$stmtAlumnosInscritos->execute();
+$resultAlumnosInscritos = $stmtAlumnosInscritos->get_result();
+$stmtAlumnosInscritos->close();
+
 // Llamar al procedimiento almacenado para obtener el total de ventas por método de pago
 $sqlTotalVentasPorMetodoPago = "CALL TotalVentasPorMetodoPago(?, ?, ?, ?, ?)";
 $stmtTotalVentasPorMetodoPago = $conexion->prepare($sqlTotalVentasPorMetodoPago);
@@ -108,7 +113,7 @@ mysqli_close($conexion);
                     <a href="./crearCurso.php" class="color-btn mt-4 d-block"
                         style="text-align:center; width:fit-content">Nuevo Curso</a>
 
-                    <a href="./misCursos.php" class="color-btn mt-4 d-block"
+                        <a href="./misCursos.php" class="color-btn mt-4 d-block"
                         style="text-align:center; width:fit-content">Mis Cursos</a>
 
                 </div>
