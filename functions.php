@@ -18,13 +18,13 @@ function CalificacionPromedio($id){
 function getCursoId($tituloCurso, $nombreCreador)  {
     $database = new db();
     $conexion = $database->conectarBD();
-    $sql = "select C.CursoID from Curso C join Usuario U on C.CreadorID = U.UsuarioID where C.Nombre = ? and U.Nombre = ?";
+    $sql = "call getCursoId(?, ?)";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param('ss', $tituloCurso, $nombreCreador);
     $stmt->execute();
     $result = $stmt->get_result();
     $id = $result->fetch_assoc()['CursoID'];
-    
+
     $result->free();
     $stmt->close();
     $conexion->close();

@@ -220,3 +220,12 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER $$
+create procedure getCursoID(in NombreCurso char(255), in NombreCreador char(255))
+begin
+    select C.CursoID from Curso C
+    join Usuario U on C.CreadorID = U.UsuarioID
+    where C.Nombre = NombreCurso and U.Nombre = NombreCreador;
+end$$
+DELIMITER ;
