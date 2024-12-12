@@ -11,6 +11,7 @@
 <?php include("header.php") ?>
 <?php
 include('conectarBD.php');
+include ('functions.php');
 include('modelos/Curso.php');
 include 'modelos/Categorias.php';
 
@@ -118,7 +119,11 @@ mysqli_close($conexion);
                                 <h3><?php echo htmlspecialchars($curso['TituloCurso']); ?></h3>
                                 <p class="pb-0 mb-4"><?php echo htmlspecialchars($curso['Descripcion']); ?></p>
                                 <p class="pb-0 m-0 fw-bold">Calificación:
-                                    <?php echo htmlspecialchars($curso['Calificacion']); ?>/5
+                                    <?php echo htmlspecialchars(CalificacionPromedio(
+                                                                        getCursoId($curso['TituloCurso'], $curso['NombreCreador'])
+                                                                        )
+                                                                ); 
+                                    ?>
                                 </p>
                                 <p class="pb-0 m-0">Creado por: <?php echo htmlspecialchars($curso['NombreCreador']); ?></p>
                                 <p class="pb-0 m-0">Fecha de Creación: <?php echo htmlspecialchars($curso['FechaCreacion']); ?>

@@ -13,6 +13,7 @@
 
 <?php
 include('conectarBD.php');
+include ('functions.php');
 $database = new db();
 $conexion = $database->conectarBD();
 
@@ -37,7 +38,7 @@ include("controladores/ObtenerCurso.php"); ?>
                 </h1>
                 <p> <?php echo $curso->descripcion ?></p>
                 <h2 class="mb-4"> $<?php echo $curso->costoGeneral ?></h2>
-                <p class="fw-bold text-white">Calificación <?php echo $curso->calificacion ?>/5</p>
+                <p class="fw-bold text-white">Calificación <?php echo CalificacionPromedio($curso->cursoID)?></p>
                 <a href="#detalle-curso" class="color-btn">Mas detalles</a>
                 <div class="mt-3">
                     <a href="/busquedas.php?cat=<?php echo $curso->categoriaID; ?>"

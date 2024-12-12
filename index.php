@@ -7,6 +7,7 @@
     <title>WebLearning</title>
 </head>
 <?php
+include_once 'functions.php';
 include 'modelos/Categorias.php';
 include('conectarBD.php');
 $database = new db();
@@ -70,7 +71,7 @@ include("controladores/CursosRecientes.php");
                                 alt="<?php echo htmlspecialchars($curso->nombre); ?>">
 
                             <h3><?php echo $curso->nombre ?></h3>
-                            <p class="text-green fw-bold">Calificacion: <?php echo $curso->calificacion ?>/5</p>
+                            <p class="text-green fw-bold">Calificacion: <?php echo CalificacionPromedio($curso->cursoID) ?></p>
                             <p><?php echo $curso->descripcion ?></p>
                             <a href="/detalleCurso.php?id=<?php echo $curso->cursoID ?>"
                                 class="course-link fw-bold text-white">Ver más</a>
@@ -98,7 +99,7 @@ include("controladores/CursosRecientes.php");
                                 alt="<?php echo htmlspecialchars($curso->nombre); ?>">
 
                             <h3><?php echo $curso->nombre ?></h3>
-                            <p class="text-green fw-bold">Calificacion: <?php echo $curso->calificacion ?>/5</p>
+                            <p class="text-green fw-bold">Calificacion: <?php echo CalificacionPromedio($curso->cursoID) ?></p>
                             <p><?php echo $curso->descripcion ?></p>
                             <a href="/detalleCurso.php?id=<?php echo $curso->cursoID ?>"
                                 class="course-link fw-bold text-white">Ver más</a>
@@ -122,7 +123,7 @@ include("controladores/CursosRecientes.php");
                                 alt="<?php echo htmlspecialchars($curso->nombre); ?>">
 
                             <h3><?php echo $curso->nombre ?></h3>
-                            <p class="text-green fw-bold">Calificacion: <?php echo $curso->calificacion ?>/5</p>
+                            <p class="text-green fw-bold">Calificacion: <?php echo CalificacionPromedio($curso->cursoID) ?></p>
                             <p><?php echo $curso->descripcion ?></p>
                             <a href="/detalleCurso.php?id=<?php echo $curso->cursoID ?>"
                                 class="course-link fw-bold text-white">Ver más</a>
